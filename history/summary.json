@@ -1,42 +1,42 @@
 [
   {
+    "name": "TORO Minecraft Server",
+    "url": "torosaba.net",
+    "icon": "https://icons.duckduckgo.com/ip3/null.ico",
+    "slug": "toro-minecraft-server",
+    "status": "up",
+    "uptime": "94.60%",
+    "uptimeDay": "94.60%",
+    "uptimeWeek": "94.60%",
+    "uptimeMonth": "94.60%",
+    "uptimeYear": "94.60%",
+    "time": 163,
+    "timeDay": 163,
+    "timeWeek": 163,
+    "timeMonth": 163,
+    "timeYear": 163,
+    "dailyMinutesDown": {
+      "2024-04-08": 1
+    }
+  },
+  {
     "name": "TORO Dynmap",
     "url": "http://torosaba.net:60016/",
     "icon": "https://icons.duckduckgo.com/ip3/torosaba.net.ico",
     "slug": "toro-dynmap",
     "status": "up",
-    "uptime": "57.85%",
-    "uptimeDay": "57.85%",
-    "uptimeWeek": "57.85%",
-    "uptimeMonth": "57.85%",
-    "uptimeYear": "57.85%",
-    "time": 621,
-    "timeDay": 621,
-    "timeWeek": 621,
-    "timeMonth": 621,
-    "timeYear": 621,
+    "uptime": "61.78%",
+    "uptimeDay": "61.78%",
+    "uptimeWeek": "61.78%",
+    "uptimeMonth": "61.78%",
+    "uptimeYear": "61.78%",
+    "time": 632,
+    "timeDay": 632,
+    "timeWeek": 632,
+    "timeMonth": 632,
+    "timeYear": 632,
     "dailyMinutesDown": {
       "2024-04-08": 76
-    }
-  },
-  {
-    "name": "TORO Minecraft Server",
-    "url": "torosaba.net",
-    "icon": "https://icons.duckduckgo.com/ip3/null.ico",
-    "slug": "toro-minecraft-server",
-    "status": "down",
-    "uptime": "4.59%",
-    "uptimeDay": "4.59%",
-    "uptimeWeek": "4.59%",
-    "uptimeMonth": "4.59%",
-    "uptimeYear": "4.59%",
-    "time": 0,
-    "timeDay": 0,
-    "timeWeek": 0,
-    "timeMonth": 0,
-    "timeYear": 0,
-    "dailyMinutesDown": {
-      "2024-04-08": 0
     }
   }
 ]
