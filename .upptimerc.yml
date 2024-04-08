@@ -18,10 +18,9 @@ status-website:
   logoUrl: https://raw.githubusercontent.com/TORO-Server/upptime/gh-pages/crime.png
   name: TORO サーバーステータス
   introTitle: "Crime な瞳でTOROサーバーの状態を監視します!"
-  introMessage: "TOROサーバー"
+  introMessage: "5分毎にTOROサーバーで稼働しているサービスの状態を監視しています。"
   navbar:
     - title: GitHub
       href: https://github.com/$OWNER/$REPO
-
 # Upptime also supports notifications, assigning issues, and more
 # See https://upptime.js.org/docs/configuration
