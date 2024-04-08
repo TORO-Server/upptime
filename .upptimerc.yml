@@ -15,13 +15,11 @@ status-website:
   # Uncomment the `baseUrl` line if you don't have a custom domain and add your repo name there
   cname: toro-server.github.io
   baseUrl: /upptime
-  logoUrl: ./crime.png
+  logoUrl: crime.png
   name: TORO サーバーステータス
   introTitle: "Crimeな瞳でTOROサーバーの状態を監視します!"
   introMessage: "TOROサーバー"
   navbar:
-    - title: Status
-      href: /
     - title: GitHub
       href: https://github.com/$OWNER/$REPO
 
