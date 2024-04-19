@@ -10,11 +10,11 @@
     "uptimeWeek": "100.00%",
     "uptimeMonth": "99.99%",
     "uptimeYear": "99.99%",
-    "time": 155,
-    "timeDay": 160,
-    "timeWeek": 165,
-    "timeMonth": 155,
-    "timeYear": 155,
+    "time": 153,
+    "timeDay": 120,
+    "timeWeek": 164,
+    "timeMonth": 153,
+    "timeYear": 153,
     "dailyMinutesDown": {
       "2024-04-08": 1
     }
@@ -25,16 +25,16 @@
     "icon": "https://icons.duckduckgo.com/ip3/torosaba.net.ico",
     "slug": "toro-dynmap",
     "status": "up",
-    "uptime": "99.46%",
+    "uptime": "99.51%",
     "uptimeDay": "100.00%",
     "uptimeWeek": "100.00%",
-    "uptimeMonth": "99.46%",
-    "uptimeYear": "99.46%",
-    "time": 521,
-    "timeDay": 480,
-    "timeWeek": 569,
-    "timeMonth": 521,
-    "timeYear": 521,
+    "uptimeMonth": "99.51%",
+    "uptimeYear": "99.51%",
+    "time": 524,
+    "timeDay": 577,
+    "timeWeek": 593,
+    "timeMonth": 524,
+    "timeYear": 524,
     "dailyMinutesDown": {
       "2024-04-08": 76
     }
