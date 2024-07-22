@@ -16,7 +16,7 @@ status-website:
   cname: status.torosaba.net
   baseUrl:
   logoUrl: https://raw.githubusercontent.com/TORO-Server/upptime/gh-pages/crime.png
-  name: TORO サーバーステータス
+  name: TORO Server Status
   introTitle: "Crime な瞳でTOROサーバーの状態を監視します!"
   introMessage: "5分毎にTOROサーバーで稼働しているサービスの状態を監視しています。"
   navbar:
