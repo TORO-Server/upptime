@@ -14,7 +14,7 @@ status-website:
   # Add your custom domain name, or remove the `cname` line if you don't have a domain
   # Uncomment the `baseUrl` line if you don't have a custom domain and add your repo name there
   cname: status.torosaba.net
-  baseUrl: /upptime
+  baseUrl: /
   logoUrl: https://raw.githubusercontent.com/TORO-Server/upptime/gh-pages/crime.png
   name: TORO サーバーステータス
   introTitle: "Crime な瞳でTOROサーバーの状態を監視します!"
