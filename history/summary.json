@@ -29,7 +29,7 @@
     "url": "http://torosaba.net:60016/",
     "icon": "https://icons.duckduckgo.com/ip3/torosaba.net.ico",
     "slug": "toro-dynmap",
-    "status": "up",
+    "status": "down",
     "uptime": "98.29%",
     "uptimeDay": "100.00%",
     "uptimeWeek": "100.00%",
@@ -41,6 +41,7 @@
     "timeMonth": 411,
     "timeYear": 499,
     "dailyMinutesDown": {
+      "2024-08-09": 0,
       "2024-07-30": 17,
       "2024-06-24": 876,
       "2024-06-23": 1237,
