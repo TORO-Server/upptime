@@ -8,7 +8,7 @@ sites:
     port: 27248
     check: "tcp-ping"
   - name: TORO Dynmap
-    url: http://torosaba.net:6001/
+    url: http://torosaba.net:60016/
 
 status-website:
   # Add your custom domain name, or remove the `cname` line if you don't have a domain
