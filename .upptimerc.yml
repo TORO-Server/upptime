@@ -12,7 +12,7 @@ sites:
     url: torosaba.net
     icon: https://eu.mc-api.net/v3/server/favicon/torosaba.net
     port: 20080
-    check: "udp-ping"
+    check: "tcp-ping"
   - name: TORO Dynmap
     url: https://map.torosaba.net/
     icon: https://map.torosaba.net/images/icons/favicon.ico
