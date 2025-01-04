@@ -3,15 +3,10 @@ owner: TORO-Server # Your GitHub organization or username, where this repository
 repo: upptime # The name of this repository
 
 sites:
-  - name: TORO Minecraft Java Server
+  - name: TORO Minecraft Server
     url: torosaba.net
     icon: https://eu.mc-api.net/v3/server/favicon/torosaba.net
     port: 27248
-    check: "tcp-ping"
-  - name: TORO Minecraft Bedrock Server
-    url: torosaba.net
-    icon: https://eu.mc-api.net/v3/server/favicon/torosaba.net
-    port: 20080
     check: "tcp-ping"
   - name: TORO Dynmap
     url: https://map.torosaba.net/
