@@ -5,7 +5,7 @@ repo: upptime # The name of this repository
 sites:
   - name: TORO Minecraft Server
     url: torosaba.net
-    icon: https://eu.mc-api.net/v3/server/favicon/torosaba.net
+    icon: https://raw.githubusercontent.com/TORO-Server/upptime/gh-pages/torosaba.png
     port: 27248
     check: "tcp-ping"
   - name: TORO Dynmap
