@@ -17,9 +17,9 @@ status-website:
   # Uncomment the `baseUrl` line if you don't have a custom domain and add your repo name there
   cname: status.torosaba.net
   baseUrl:
-  logoUrl: https://status.torosaba.net/crime.png
-  favicon: https://status.torosaba.net/crime.png
-  faviconSvg: https://status.torosaba.net/crime.svg
+  logoUrl: https://status.torosaba.net/logo.png
+  favicon: https://status.torosaba.net/logo.png
+  faviconSvg: https://status.torosaba.net/logo.svg
   name: TORO Status
   introTitle: "Crime な瞳でTOROサーバーの状態を監視します!"
   introMessage: "5分毎にTOROサーバーで稼働しているサービスの状態を監視しています。"
