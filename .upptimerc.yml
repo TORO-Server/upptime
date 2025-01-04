@@ -5,7 +5,7 @@ repo: upptime # The name of this repository
 sites:
   - name: TORO Minecraft Server
     url: torosaba.net
-    icon: https://raw.githubusercontent.com/TORO-Server/upptime/gh-pages/torosaba.png
+    icon: /torosaba.png
     port: 27248
     check: "tcp-ping"
   - name: TORO Dynmap
@@ -17,7 +17,7 @@ status-website:
   # Uncomment the `baseUrl` line if you don't have a custom domain and add your repo name there
   cname: status.torosaba.net
   baseUrl:
-  logoUrl: https://raw.githubusercontent.com/TORO-Server/upptime/gh-pages/crime.png
+  logoUrl: /crime.png
   name: TORO Status
   introTitle: "Crime な瞳でTOROサーバーの状態を監視します!"
   introMessage: "5分毎にTOROサーバーで稼働しているサービスの状態を監視しています。"
