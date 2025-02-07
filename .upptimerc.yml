@@ -34,7 +34,7 @@ workflowSchedule:
   summary: "0 0 * * *"
   updateTemplate: "0 0 * * *"
   updates: "0 3 * * *"
-  uptime: "*/7 * * * *"
+  uptime: "0,5,10,15,20,25,35,40,45,50,55 * * * *"
 
 # Upptime also supports notifications, assigning issues, and more
 # See https://upptime.js.org/docs/configuration
@@ -43,8 +43,6 @@ workflowSchedule:
 # https://github.com/yamagami2211/site-kanshi/blob/master/.upptimerc.yml#L31-L106 から編集
 # thank you, Yamagami2211
 
-# 40 - 81 Line : WebSite
-# 82 - 104 Line : Readme.md
 i18n:
   activeIncidents: "有効な障害"
   incidentReport: "障害レポート #$NUMBER→"
