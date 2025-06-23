@@ -41,7 +41,7 @@
     "url": "https://map.torosaba.net/",
     "icon": "https://map.torosaba.net/images/icons/favicon.ico",
     "slug": "toro-dynmap",
-    "status": "up",
+    "status": "down",
     "uptime": "97.75%",
     "uptimeDay": "100.00%",
     "uptimeWeek": "100.00%",
@@ -53,6 +53,7 @@
     "timeMonth": 594,
     "timeYear": 484,
     "dailyMinutesDown": {
+      "2025-06-23": 0,
       "2025-06-15": 240,
       "2025-05-15": 44,
       "2025-04-25": 44,
