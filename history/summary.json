@@ -5,14 +5,14 @@
     "icon": "https://status.torosaba.net/torosaba.png",
     "slug": "toro-minecraft-server",
     "status": "up",
-    "uptime": "94.83%",
+    "uptime": "94.85%",
     "uptimeDay": "100.00%",
     "uptimeWeek": "100.00%",
     "uptimeMonth": "99.58%",
-    "uptimeYear": "95.33%",
+    "uptimeYear": "95.70%",
     "time": 155,
-    "timeDay": 124,
-    "timeWeek": 155,
+    "timeDay": 158,
+    "timeWeek": 153,
     "timeMonth": 150,
     "timeYear": 154,
     "dailyMinutesDown": {
@@ -32,8 +32,7 @@
       "2024-10-26": 269,
       "2024-10-25": 22,
       "2024-08-14": 456,
-      "2024-08-13": 290,
-      "2024-06-24": 876
+      "2024-08-13": 290
     }
   },
   {
@@ -42,14 +41,14 @@
     "icon": "https://map.torosaba.net/images/icons/favicon.ico",
     "slug": "toro-dynmap",
     "status": "up",
-    "uptime": "97.67%",
+    "uptime": "97.68%",
     "uptimeDay": "65.29%",
     "uptimeWeek": "95.04%",
     "uptimeMonth": "98.31%",
-    "uptimeYear": "97.44%",
+    "uptimeYear": "97.60%",
     "time": 492,
-    "timeDay": 1268,
-    "timeWeek": 763,
+    "timeDay": 652,
+    "timeWeek": 765,
     "timeMonth": 597,
     "timeYear": 484,
     "dailyMinutesDown": {
@@ -76,8 +75,7 @@
       "2024-09-29": 18,
       "2024-08-14": 456,
       "2024-08-13": 289,
-      "2024-07-30": 17,
-      "2024-06-24": 876
+      "2024-07-30": 17
     }
   }
 ]
