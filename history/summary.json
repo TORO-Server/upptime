@@ -5,11 +5,11 @@
     "icon": "https://status.torosaba.net/torosaba.png",
     "slug": "toro-minecraft-server",
     "status": "up",
-    "uptime": "96.87%",
+    "uptime": "96.88%",
     "uptimeDay": "100.00%",
     "uptimeWeek": "99.50%",
     "uptimeMonth": "99.89%",
-    "uptimeYear": "97.77%",
+    "uptimeYear": "97.78%",
     "time": 155,
     "timeDay": 177,
     "timeWeek": 157,
@@ -46,10 +46,10 @@
     "uptimeMonth": "99.34%",
     "uptimeYear": "97.78%",
     "time": 511,
-    "timeDay": 645,
-    "timeWeek": 638,
-    "timeMonth": 598,
-    "timeYear": 545,
+    "timeDay": 660,
+    "timeWeek": 642,
+    "timeMonth": 601,
+    "timeYear": 546,
     "dailyMinutesDown": {
       "2025-10-10": 289,
       "2025-08-04": 56,
@@ -73,8 +73,7 @@
       "2024-12-25": 1302,
       "2024-10-27": 79,
       "2024-10-26": 268,
-      "2024-10-25": 21,
-      "2024-10-14": 194
+      "2024-10-25": 21
     }
   }
 ]
