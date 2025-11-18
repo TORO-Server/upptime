@@ -1,7 +1,7 @@
 url: https://map.torosaba.net/
-status: up
-code: 200
-responseTime: 480
-lastUpdated: 2025-11-17T23:13:00.293Z
+status: down
+code: 500
+responseTime: 120
+lastUpdated: 2025-11-18T13:34:52.274Z
 startTime: 2024-04-08T06:14:32.948Z
 generator: Upptime <https://github.com/upptime/upptime>
