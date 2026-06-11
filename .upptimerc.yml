@@ -8,9 +8,36 @@ sites:
     icon: https://status.torosaba.net/torosaba.png
     port: 27248
     check: "tcp-ping"
+  - name: TORO Minecraft Server (minuma)
+    url: minuma.torosaba.net
+    icon: https://status.torosaba.net/torosaba.png
+    port: 27248
+    check: "tcp-ping"
+  - name: TORO Minecraft Server (lgb)
+    url: lgb.torosaba.net
+    icon: https://status.torosaba.net/torosaba.png
+    port: 27248
+    check: "tcp-ping"
+  - name: TORO Minecraft Server (doro)
+    url: doro.torosaba.net
+    icon: https://status.torosaba.net/torosaba.png
+    port: 27248
+    check: "tcp-ping"
+  - name: TORO Minecraft Server (toto)
+    url: toto.torosaba.net
+    icon: https://status.torosaba.net/torosaba.png
+    port: 27248
+    check: "tcp-ping"
   - name: TORO Dynmap
     url: https://map.torosaba.net/
     icon: https://map.torosaba.net/images/icons/favicon.ico
+  - name: TORO Pass API
+    url: https://pass-api.torosaba.net/
+  - name: TORO Sound
+    url: https://sound.torosaba.net/
+  - name: TORO Status Page
+    url: https://status.torosaba.net/
+    icon: https://status.torosaba.net/logo.png
 
 status-website:
   # Add your custom domain name, or remove the `cname` line if you don't have a domain
