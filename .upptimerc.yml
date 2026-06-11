@@ -5,27 +5,27 @@ repo: upptime # The name of this repository
 sites:
   - name: TORO Minecraft Server
     url: torosaba.net
-    icon: https://status.torosaba.net/torosaba.png
+    icon: https://status.torosaba.net/toro.png
     port: 27248
     check: "tcp-ping"
   - name: TORO Minecraft Server (minuma)
     url: minuma.torosaba.net
-    icon: https://status.torosaba.net/torosaba.png
+    icon: https://status.torosaba.net/minuma.png
     port: 27248
     check: "tcp-ping"
   - name: TORO Minecraft Server (lgb)
     url: lgb.torosaba.net
-    icon: https://status.torosaba.net/torosaba.png
+    icon: https://status.torosaba.net/lgbtoro.png
     port: 27248
     check: "tcp-ping"
   - name: TORO Minecraft Server (doro)
     url: doro.torosaba.net
-    icon: https://status.torosaba.net/torosaba.png
+    icon: https://status.torosaba.net/doro.png
     port: 27248
     check: "tcp-ping"
   - name: TORO Minecraft Server (toto)
     url: toto.torosaba.net
-    icon: https://status.torosaba.net/torosaba.png
+    icon: https://status.torosaba.net/toto.png
     port: 27248
     check: "tcp-ping"
   - name: TORO Dynmap
