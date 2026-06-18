@@ -1,7 +1,7 @@
 url: https://pass-api.torosaba.net/
-status: down
-code: 530
-responseTime: 71
-lastUpdated: 2026-06-18T20:31:38.801Z
+status: up
+code: 200
+responseTime: 422
+lastUpdated: 2026-06-18T22:57:38.294Z
 startTime: 2026-06-11T02:45:36.729Z
 generator: Upptime <https://github.com/upptime/upptime>
