@@ -1,18 +1,31 @@
-#!/usr/bin/env node
-// TORO Status — custom uptime checker (no external dependencies)
+#!/usr/bin/env -S npx tsx
+// TORO Status — custom uptime checker (TypeScript, zero runtime dependencies).
 //
 // Runs every cron tick: performs a Minecraft Server List Ping (SLP) for
 // `minecraft` sites and an HTTP request for `http` sites, appends the result to
 // each site's rolling history, recomputes uptime / response-time aggregates, and
 // writes the data the Vue front-end reads from `frontend/public/data/`.
 //
-// Usage: node scripts/check.mjs
+// Usage: npm run check   (or: npx tsx scripts/check.ts)
 
 import net from "node:net";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { performance } from "node:perf_hooks";
+
+import type {
+  Config,
+  CheckResult,
+  DayBar,
+  HistoryPoint,
+  Players,
+  SiteConfig,
+  SiteHistory,
+  SiteSummary,
+  Status,
+  Summary,
+} from "../shared/types.ts";
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const CONFIG_PATH = path.join(ROOT, "config", "sites.json");
@@ -25,8 +38,8 @@ const DAY = 86400; // seconds
 // Minecraft Server List Ping (status) — gives up/down, latency, and players
 // ---------------------------------------------------------------------------
 
-function writeVarInt(value) {
-  const bytes = [];
+function writeVarInt(value: number): Buffer {
+  const bytes: number[] = [];
   let v = value;
   do {
     let temp = v & 0x7f;
@@ -37,13 +50,16 @@ function writeVarInt(value) {
   return Buffer.from(bytes);
 }
 
-function readVarInt(buf, offset) {
+function readVarInt(
+  buf: Buffer,
+  offset: number
+): { value: number; size: number } | null {
   let numRead = 0;
   let result = 0;
-  let byte;
+  let byte = 0;
   do {
     if (offset + numRead >= buf.length) return null; // need more bytes
-    byte = buf[offset + numRead];
+    byte = buf[offset + numRead]!;
     result |= (byte & 0x7f) << (7 * numRead);
     numRead++;
     if (numRead > 5) throw new Error("VarInt too big");
@@ -51,7 +67,7 @@ function readVarInt(buf, offset) {
   return { value: result >>> 0, size: numRead };
 }
 
-function buildHandshake(host, port) {
+function buildHandshake(host: string, port: number): Buffer {
   const hostBuf = Buffer.from(host, "utf8");
   const payload = Buffer.concat([
     Buffer.from([0x00]), // packet id: handshake
@@ -66,7 +82,12 @@ function buildHandshake(host, port) {
 
 const STATUS_REQUEST = Buffer.concat([writeVarInt(1), Buffer.from([0x00])]);
 
-function parseStatusResponse(buf) {
+interface ParsedStatus {
+  players: Players | null;
+  version: string | null;
+}
+
+function parseStatusResponse(buf: Buffer): ParsedStatus | null {
   const lenField = readVarInt(buf, 0);
   if (!lenField) return null;
   const totalNeeded = lenField.size + lenField.value;
@@ -85,7 +106,10 @@ function parseStatusResponse(buf) {
   if (jsonBytes.length < strLen.value) return null;
 
   try {
-    const json = JSON.parse(jsonBytes.toString("utf8"));
+    const json = JSON.parse(jsonBytes.toString("utf8")) as {
+      players?: { online?: number; max?: number };
+      version?: { name?: string };
+    };
     return {
       players: json.players
         ? { online: json.players.online ?? null, max: json.players.max ?? null }
@@ -97,7 +121,11 @@ function parseStatusResponse(buf) {
   }
 }
 
-function minecraftPing(host, port, timeoutMs) {
+function minecraftPing(
+  host: string,
+  port: number,
+  timeoutMs: number
+): Promise<CheckResult> {
   return new Promise((resolve) => {
     const start = performance.now();
     let settled = false;
@@ -107,7 +135,7 @@ function minecraftPing(host, port, timeoutMs) {
     const socket = net.createConnection({ host, port });
     socket.setTimeout(timeoutMs);
 
-    const finish = (result) => {
+    const finish = (result: CheckResult): void => {
       if (settled) return;
       settled = true;
       socket.destroy();
@@ -119,7 +147,7 @@ function minecraftPing(host, port, timeoutMs) {
       socket.write(Buffer.concat([buildHandshake(host, port), STATUS_REQUEST]));
     });
 
-    socket.on("data", (d) => {
+    socket.on("data", (d: Buffer) => {
       chunks = Buffer.concat([chunks, d]);
       try {
         const parsed = parseStatusResponse(chunks);
@@ -132,14 +160,18 @@ function minecraftPing(host, port, timeoutMs) {
           });
         }
       } catch (e) {
-        finish({ up: false, responseTime: null, error: String(e.message || e) });
+        finish({
+          up: false,
+          responseTime: null,
+          error: String(e instanceof Error ? e.message : e),
+        });
       }
     });
 
     socket.on("timeout", () =>
       finish({ up: false, responseTime: null, error: "timeout" })
     );
-    socket.on("error", (e) =>
+    socket.on("error", (e: NodeJS.ErrnoException) =>
       finish({ up: false, responseTime: null, error: e.code || e.message })
     );
     socket.on("close", () => {
@@ -162,7 +194,7 @@ function minecraftPing(host, port, timeoutMs) {
 // HTTP check
 // ---------------------------------------------------------------------------
 
-async function httpCheck(url, timeoutMs) {
+async function httpCheck(url: string, timeoutMs: number): Promise<CheckResult> {
   const start = performance.now();
   try {
     const res = await fetch(url, {
@@ -170,7 +202,7 @@ async function httpCheck(url, timeoutMs) {
       redirect: "follow",
       signal: AbortSignal.timeout(timeoutMs),
       headers: {
-        "User-Agent": "TORO-Status/1.0 (+https://status.torosaba.net)",
+        "User-Agent": "TORO-Status/2.0 (+https://status.torosaba.net)",
       },
     });
     // Drain the body so the connection can close cleanly.
@@ -182,10 +214,14 @@ async function httpCheck(url, timeoutMs) {
       code: res.status,
     };
   } catch (e) {
+    const err = e as { name?: string; cause?: { code?: string }; message?: string };
     return {
       up: false,
       responseTime: null,
-      error: e.name === "TimeoutError" ? "timeout" : e.cause?.code || e.message,
+      error:
+        err.name === "TimeoutError"
+          ? "timeout"
+          : err.cause?.code || err.message || "error",
     };
   }
 }
@@ -194,24 +230,24 @@ async function httpCheck(url, timeoutMs) {
 // Aggregation helpers
 // ---------------------------------------------------------------------------
 
-function uptimeOf(points, sinceSec) {
+function uptimeOf(points: HistoryPoint[], sinceSec: number | null): number | null {
   const within = sinceSec ? points.filter((p) => p.t >= sinceSec) : points;
   if (within.length === 0) return null;
   const available = within.filter((p) => p.s !== "down").length;
   return Math.round((available / within.length) * 10000) / 100; // 2 decimals
 }
 
-function avgRtOf(points, sinceSec) {
+function avgRtOf(points: HistoryPoint[], sinceSec: number | null): number | null {
   const within = (sinceSec ? points.filter((p) => p.t >= sinceSec) : points).filter(
-    (p) => typeof p.r === "number"
+    (p): p is HistoryPoint & { r: number } => typeof p.r === "number"
   );
   if (within.length === 0) return null;
   return Math.round(within.reduce((s, p) => s + p.r, 0) / within.length);
 }
 
-function dailyBars(points, days, nowSec) {
+function dailyBars(points: HistoryPoint[], days: number, nowSec: number): DayBar[] {
   // Per-UTC-day uptime fraction for the last `days` days (oldest -> newest).
-  const bars = [];
+  const bars: DayBar[] = [];
   const todayStart = Math.floor(nowSec / DAY) * DAY;
   for (let i = days - 1; i >= 0; i--) {
     const dayStart = todayStart - i * DAY;
@@ -220,7 +256,9 @@ function dailyBars(points, days, nowSec) {
     bars.push({
       date: new Date(dayStart * 1000).toISOString().slice(0, 10),
       uptime: inDay.length
-        ? Math.round((inDay.filter((p) => p.s !== "down").length / inDay.length) * 10000) / 100
+        ? Math.round(
+            (inDay.filter((p) => p.s !== "down").length / inDay.length) * 10000
+          ) / 100
         : null,
     });
   }
@@ -231,16 +269,93 @@ function dailyBars(points, days, nowSec) {
 // Main
 // ---------------------------------------------------------------------------
 
-async function readJson(file, fallback) {
+async function readJson<T>(file: string, fallback: T): Promise<T> {
   try {
-    return JSON.parse(await fs.readFile(file, "utf8"));
+    return JSON.parse(await fs.readFile(file, "utf8")) as T;
   } catch {
     return fallback;
   }
 }
 
-async function main() {
-  const config = JSON.parse(await fs.readFile(CONFIG_PATH, "utf8"));
+async function checkSite(
+  site: SiteConfig,
+  opts: { timeoutMs: number; degradedMs: number; nowSec: number; cutoff: number }
+): Promise<SiteSummary> {
+  const { timeoutMs, degradedMs, nowSec, cutoff } = opts;
+
+  const check: CheckResult =
+    site.type === "minecraft"
+      ? await minecraftPing(site.host ?? "", site.port ?? 0, timeoutMs)
+      : await httpCheck(site.url ?? "", timeoutMs);
+
+  let status: Status = "down";
+  if (check.up) {
+    status =
+      typeof check.responseTime === "number" && check.responseTime > degradedMs
+        ? "degraded"
+        : "up";
+  }
+
+  const point: HistoryPoint = {
+    t: nowSec,
+    s: status,
+    r: check.responseTime ?? null,
+  };
+  if (site.type === "minecraft" && check.players) {
+    point.p = check.players.online;
+  }
+
+  // Load + update rolling history for this site.
+  const historyFile = path.join(HISTORY_DIR, `${site.slug}.json`);
+  const prev = await readJson<SiteHistory>(historyFile, {
+    slug: site.slug,
+    points: [],
+  });
+  const points = (prev.points || []).filter((p) => p.t >= cutoff);
+  points.push(point);
+
+  await fs.writeFile(
+    historyFile,
+    JSON.stringify({ slug: site.slug, name: site.name, points }),
+    "utf8"
+  );
+
+  const target =
+    site.type === "minecraft" ? `${site.host}:${site.port}` : site.url ?? "";
+
+  return {
+    slug: site.slug,
+    name: site.name,
+    type: site.type,
+    icon: site.icon ?? null,
+    target,
+    url: site.type === "http" ? site.url ?? null : null,
+    status,
+    responseTime: check.responseTime ?? null,
+    players: site.type === "minecraft" ? check.players ?? null : null,
+    version: check.version ?? null,
+    lastChecked: new Date(nowSec * 1000).toISOString(),
+    error: check.up ? null : check.error ?? null,
+    uptime: {
+      "24h": uptimeOf(points, nowSec - DAY),
+      "7d": uptimeOf(points, nowSec - 7 * DAY),
+      "30d": uptimeOf(points, nowSec - 30 * DAY),
+      all: uptimeOf(points, null),
+    },
+    avgResponseTime: {
+      "24h": avgRtOf(points, nowSec - DAY),
+      "7d": avgRtOf(points, nowSec - 7 * DAY),
+      "30d": avgRtOf(points, nowSec - 30 * DAY),
+      all: avgRtOf(points, null),
+    },
+    // Embedded views so the front-end only needs summary.json.
+    sparkline: points.slice(-48).map((p) => (p.s === "down" ? null : p.r)),
+    bars: dailyBars(points, 30, nowSec),
+  };
+}
+
+async function main(): Promise<void> {
+  const config = JSON.parse(await fs.readFile(CONFIG_PATH, "utf8")) as Config;
   const settings = config.settings ?? {};
   const timeoutMs = settings.timeoutMs ?? 10000;
   const retentionDays = settings.retentionDays ?? 30;
@@ -252,73 +367,12 @@ async function main() {
   const cutoff = nowSec - retentionDays * DAY;
 
   const summarySites = await Promise.all(
-    config.sites.map(async (site) => {
-      const check =
-        site.type === "minecraft"
-          ? await minecraftPing(site.host, site.port, timeoutMs)
-          : await httpCheck(site.url, timeoutMs);
-
-      let status = "down";
-      if (check.up) {
-        status =
-          typeof check.responseTime === "number" && check.responseTime > degradedMs
-            ? "degraded"
-            : "up";
-      }
-
-      const point = { t: nowSec, s: status, r: check.responseTime ?? null };
-      if (site.type === "minecraft" && check.players) {
-        point.p = check.players.online;
-      }
-
-      // Load + update rolling history for this site.
-      const historyFile = path.join(HISTORY_DIR, `${site.slug}.json`);
-      const prev = await readJson(historyFile, { slug: site.slug, points: [] });
-      const points = (prev.points || []).filter((p) => p.t >= cutoff);
-      points.push(point);
-
-      await fs.writeFile(
-        historyFile,
-        JSON.stringify({ slug: site.slug, name: site.name, points }),
-        "utf8"
-      );
-
-      const target =
-        site.type === "minecraft" ? `${site.host}:${site.port}` : site.url;
-
-      return {
-        slug: site.slug,
-        name: site.name,
-        type: site.type,
-        icon: site.icon ?? null,
-        target,
-        url: site.type === "http" ? site.url : null,
-        status,
-        responseTime: check.responseTime ?? null,
-        players: site.type === "minecraft" ? check.players : null,
-        version: check.version ?? null,
-        lastChecked: new Date(nowSec * 1000).toISOString(),
-        error: check.up ? null : check.error ?? null,
-        uptime: {
-          "24h": uptimeOf(points, nowSec - DAY),
-          "7d": uptimeOf(points, nowSec - 7 * DAY),
-          "30d": uptimeOf(points, nowSec - 30 * DAY),
-          all: uptimeOf(points, null),
-        },
-        avgResponseTime: {
-          "24h": avgRtOf(points, nowSec - DAY),
-          "7d": avgRtOf(points, nowSec - 7 * DAY),
-          "30d": avgRtOf(points, nowSec - 30 * DAY),
-          all: avgRtOf(points, null),
-        },
-        // Embedded views so the front-end only needs summary.json.
-        sparkline: points.slice(-48).map((p) => (p.s === "down" ? null : p.r)),
-        bars: dailyBars(points, 30, nowSec),
-      };
-    })
+    config.sites.map((site) =>
+      checkSite(site, { timeoutMs, degradedMs, nowSec, cutoff })
+    )
   );
 
-  const summary = {
+  const summary: Summary = {
     name: config.name,
     intro: config.intro ?? null,
     logoUrl: config.logoUrl ?? null,
@@ -339,15 +393,16 @@ async function main() {
       s.type === "minecraft" && s.players
         ? ` players=${s.players.online}/${s.players.max}`
         : "";
+    const dot = s.status === "up" ? "🟩" : s.status === "degraded" ? "🟨" : "🟥";
     console.log(
-      `${s.status === "up" ? "🟩" : s.status === "degraded" ? "🟨" : "🟥"} ${s.name} — ${s.status} ${
+      `${dot} ${s.name} — ${s.status} ${
         s.responseTime != null ? s.responseTime + "ms" : "-"
       }${extra}${s.error ? ` (${s.error})` : ""}`
     );
   }
 }
 
-main().catch((e) => {
+main().catch((e: unknown) => {
   console.error(e);
   process.exit(1);
 });
