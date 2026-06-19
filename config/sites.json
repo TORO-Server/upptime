@@ -1,0 +1,84 @@
+{
+  "name": "TORO Status",
+  "cname": "status.torosaba.net",
+  "logoUrl": "https://status.torosaba.net/logo.png",
+  "favicon": "https://status.torosaba.net/logo.png",
+  "github": "https://github.com/TORO-Server/upptime",
+  "intro": {
+    "title": "Crime な瞳でTOROサーバーの状態を監視します!",
+    "message": "TOROサーバーで稼働しているサービスの状態を監視しています。"
+  },
+  "settings": {
+    "retentionDays": 30,
+    "degradedThresholdMs": 3000,
+    "timeoutMs": 10000
+  },
+  "sites": [
+    {
+      "slug": "toro-minecraft-server",
+      "name": "TORO Minecraft Server",
+      "type": "minecraft",
+      "host": "torosaba.net",
+      "port": 27248,
+      "icon": "https://status.torosaba.net/toro.png"
+    },
+    {
+      "slug": "toro-minecraft-server-minuma",
+      "name": "TORO Minecraft Server (minuma)",
+      "type": "minecraft",
+      "host": "minuma.torosaba.net",
+      "port": 27248,
+      "icon": "https://status.torosaba.net/minuma.png"
+    },
+    {
+      "slug": "toro-minecraft-server-lgb",
+      "name": "TORO Minecraft Server (lgb)",
+      "type": "minecraft",
+      "host": "lgb.torosaba.net",
+      "port": 27248,
+      "icon": "https://status.torosaba.net/lgbtoro.png"
+    },
+    {
+      "slug": "toro-minecraft-server-doro",
+      "name": "TORO Minecraft Server (doro)",
+      "type": "minecraft",
+      "host": "doro.torosaba.net",
+      "port": 27248,
+      "icon": "https://status.torosaba.net/doro.png"
+    },
+    {
+      "slug": "toro-minecraft-server-toto",
+      "name": "TORO Minecraft Server (toto)",
+      "type": "minecraft",
+      "host": "toto.torosaba.net",
+      "port": 27248,
+      "icon": "https://status.torosaba.net/toto.png"
+    },
+    {
+      "slug": "toro-dynmap",
+      "name": "TORO Dynmap",
+      "type": "http",
+      "url": "https://map.torosaba.net/",
+      "icon": "https://map.torosaba.net/images/icons/favicon.ico"
+    },
+    {
+      "slug": "toro-pass-api",
+      "name": "TORO Pass API",
+      "type": "http",
+      "url": "https://pass-api.torosaba.net/"
+    },
+    {
+      "slug": "toro-sound",
+      "name": "TORO Sound",
+      "type": "http",
+      "url": "https://sound.torosaba.net/"
+    },
+    {
+      "slug": "toro-status-page",
+      "name": "TORO Status Page",
+      "type": "http",
+      "url": "https://status.torosaba.net/",
+      "icon": "https://status.torosaba.net/logo.png"
+    }
+  ]
+}

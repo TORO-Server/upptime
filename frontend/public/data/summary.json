@@ -1,0 +1,1395 @@
+{
+  "name": "TORO Status",
+  "intro": {
+    "title": "Crime な瞳でTOROサーバーの状態を監視します!",
+    "message": "TOROサーバーで稼働しているサービスの状態を監視しています。"
+  },
+  "logoUrl": "https://status.torosaba.net/logo.png",
+  "github": "https://github.com/TORO-Server/upptime",
+  "generatedAt": "2026-06-19T11:45:08.000Z",
+  "sites": [
+    {
+      "slug": "toro-minecraft-server",
+      "name": "TORO Minecraft Server",
+      "type": "minecraft",
+      "icon": "https://status.torosaba.net/toro.png",
+      "target": "torosaba.net:27248",
+      "url": null,
+      "status": "up",
+      "responseTime": 143,
+      "players": {
+        "online": 0,
+        "max": 100
+      },
+      "version": "1.12.2-1.20.4",
+      "lastChecked": "2026-06-19T11:45:08.000Z",
+      "error": null,
+      "uptime": {
+        "24h": 100,
+        "7d": 100,
+        "30d": 100,
+        "all": 100
+      },
+      "avgResponseTime": {
+        "24h": 163,
+        "7d": 163,
+        "30d": 163,
+        "all": 163
+      },
+      "sparkline": [
+        182,
+        143
+      ],
+      "bars": [
+        {
+          "date": "2026-05-21",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-22",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-23",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-24",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-25",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-26",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-27",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-28",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-29",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-30",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-31",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-01",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-02",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-03",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-04",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-05",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-06",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-07",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-08",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-09",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-10",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-11",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-12",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-13",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-14",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-15",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-16",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-17",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-18",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-19",
+          "uptime": 100
+        }
+      ]
+    },
+    {
+      "slug": "toro-minecraft-server-minuma",
+      "name": "TORO Minecraft Server (minuma)",
+      "type": "minecraft",
+      "icon": "https://status.torosaba.net/minuma.png",
+      "target": "minuma.torosaba.net:27248",
+      "url": null,
+      "status": "up",
+      "responseTime": 123,
+      "players": {
+        "online": 0,
+        "max": 100
+      },
+      "version": "0.0.0-9.99.9",
+      "lastChecked": "2026-06-19T11:45:08.000Z",
+      "error": null,
+      "uptime": {
+        "24h": 100,
+        "7d": 100,
+        "30d": 100,
+        "all": 100
+      },
+      "avgResponseTime": {
+        "24h": 139,
+        "7d": 139,
+        "30d": 139,
+        "all": 139
+      },
+      "sparkline": [
+        154,
+        123
+      ],
+      "bars": [
+        {
+          "date": "2026-05-21",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-22",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-23",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-24",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-25",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-26",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-27",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-28",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-29",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-30",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-31",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-01",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-02",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-03",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-04",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-05",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-06",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-07",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-08",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-09",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-10",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-11",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-12",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-13",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-14",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-15",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-16",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-17",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-18",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-19",
+          "uptime": 100
+        }
+      ]
+    },
+    {
+      "slug": "toro-minecraft-server-lgb",
+      "name": "TORO Minecraft Server (lgb)",
+      "type": "minecraft",
+      "icon": "https://status.torosaba.net/lgbtoro.png",
+      "target": "lgb.torosaba.net:27248",
+      "url": null,
+      "status": "up",
+      "responseTime": 145,
+      "players": {
+        "online": 0,
+        "max": 100
+      },
+      "version": "0.0.0-9.99.9",
+      "lastChecked": "2026-06-19T11:45:08.000Z",
+      "error": null,
+      "uptime": {
+        "24h": 100,
+        "7d": 100,
+        "30d": 100,
+        "all": 100
+      },
+      "avgResponseTime": {
+        "24h": 157,
+        "7d": 157,
+        "30d": 157,
+        "all": 157
+      },
+      "sparkline": [
+        169,
+        145
+      ],
+      "bars": [
+        {
+          "date": "2026-05-21",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-22",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-23",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-24",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-25",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-26",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-27",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-28",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-29",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-30",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-31",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-01",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-02",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-03",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-04",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-05",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-06",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-07",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-08",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-09",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-10",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-11",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-12",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-13",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-14",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-15",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-16",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-17",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-18",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-19",
+          "uptime": 100
+        }
+      ]
+    },
+    {
+      "slug": "toro-minecraft-server-doro",
+      "name": "TORO Minecraft Server (doro)",
+      "type": "minecraft",
+      "icon": "https://status.torosaba.net/doro.png",
+      "target": "doro.torosaba.net:27248",
+      "url": null,
+      "status": "up",
+      "responseTime": 123,
+      "players": {
+        "online": 0,
+        "max": 100
+      },
+      "version": "0.0.0-9.99.9",
+      "lastChecked": "2026-06-19T11:45:08.000Z",
+      "error": null,
+      "uptime": {
+        "24h": 100,
+        "7d": 100,
+        "30d": 100,
+        "all": 100
+      },
+      "avgResponseTime": {
+        "24h": 138,
+        "7d": 138,
+        "30d": 138,
+        "all": 138
+      },
+      "sparkline": [
+        153,
+        123
+      ],
+      "bars": [
+        {
+          "date": "2026-05-21",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-22",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-23",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-24",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-25",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-26",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-27",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-28",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-29",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-30",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-31",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-01",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-02",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-03",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-04",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-05",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-06",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-07",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-08",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-09",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-10",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-11",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-12",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-13",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-14",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-15",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-16",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-17",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-18",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-19",
+          "uptime": 100
+        }
+      ]
+    },
+    {
+      "slug": "toro-minecraft-server-toto",
+      "name": "TORO Minecraft Server (toto)",
+      "type": "minecraft",
+      "icon": "https://status.torosaba.net/toto.png",
+      "target": "toto.torosaba.net:27248",
+      "url": null,
+      "status": "up",
+      "responseTime": 119,
+      "players": {
+        "online": 0,
+        "max": 100
+      },
+      "version": "0.0.0-9.99.9",
+      "lastChecked": "2026-06-19T11:45:08.000Z",
+      "error": null,
+      "uptime": {
+        "24h": 100,
+        "7d": 100,
+        "30d": 100,
+        "all": 100
+      },
+      "avgResponseTime": {
+        "24h": 137,
+        "7d": 137,
+        "30d": 137,
+        "all": 137
+      },
+      "sparkline": [
+        155,
+        119
+      ],
+      "bars": [
+        {
+          "date": "2026-05-21",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-22",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-23",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-24",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-25",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-26",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-27",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-28",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-29",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-30",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-31",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-01",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-02",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-03",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-04",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-05",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-06",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-07",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-08",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-09",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-10",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-11",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-12",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-13",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-14",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-15",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-16",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-17",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-18",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-19",
+          "uptime": 100
+        }
+      ]
+    },
+    {
+      "slug": "toro-dynmap",
+      "name": "TORO Dynmap",
+      "type": "http",
+      "icon": "https://map.torosaba.net/images/icons/favicon.ico",
+      "target": "https://map.torosaba.net/",
+      "url": "https://map.torosaba.net/",
+      "status": "up",
+      "responseTime": 143,
+      "players": null,
+      "version": null,
+      "lastChecked": "2026-06-19T11:45:08.000Z",
+      "error": null,
+      "uptime": {
+        "24h": 100,
+        "7d": 100,
+        "30d": 100,
+        "all": 100
+      },
+      "avgResponseTime": {
+        "24h": 208,
+        "7d": 208,
+        "30d": 208,
+        "all": 208
+      },
+      "sparkline": [
+        272,
+        143
+      ],
+      "bars": [
+        {
+          "date": "2026-05-21",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-22",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-23",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-24",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-25",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-26",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-27",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-28",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-29",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-30",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-31",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-01",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-02",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-03",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-04",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-05",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-06",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-07",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-08",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-09",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-10",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-11",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-12",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-13",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-14",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-15",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-16",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-17",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-18",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-19",
+          "uptime": 100
+        }
+      ]
+    },
+    {
+      "slug": "toro-pass-api",
+      "name": "TORO Pass API",
+      "type": "http",
+      "icon": null,
+      "target": "https://pass-api.torosaba.net/",
+      "url": "https://pass-api.torosaba.net/",
+      "status": "up",
+      "responseTime": 106,
+      "players": null,
+      "version": null,
+      "lastChecked": "2026-06-19T11:45:08.000Z",
+      "error": null,
+      "uptime": {
+        "24h": 100,
+        "7d": 100,
+        "30d": 100,
+        "all": 100
+      },
+      "avgResponseTime": {
+        "24h": 156,
+        "7d": 156,
+        "30d": 156,
+        "all": 156
+      },
+      "sparkline": [
+        206,
+        106
+      ],
+      "bars": [
+        {
+          "date": "2026-05-21",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-22",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-23",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-24",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-25",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-26",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-27",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-28",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-29",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-30",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-31",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-01",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-02",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-03",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-04",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-05",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-06",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-07",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-08",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-09",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-10",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-11",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-12",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-13",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-14",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-15",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-16",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-17",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-18",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-19",
+          "uptime": 100
+        }
+      ]
+    },
+    {
+      "slug": "toro-sound",
+      "name": "TORO Sound",
+      "type": "http",
+      "icon": null,
+      "target": "https://sound.torosaba.net/",
+      "url": "https://sound.torosaba.net/",
+      "status": "up",
+      "responseTime": 54,
+      "players": null,
+      "version": null,
+      "lastChecked": "2026-06-19T11:45:08.000Z",
+      "error": null,
+      "uptime": {
+        "24h": 100,
+        "7d": 100,
+        "30d": 100,
+        "all": 100
+      },
+      "avgResponseTime": {
+        "24h": 163,
+        "7d": 163,
+        "30d": 163,
+        "all": 163
+      },
+      "sparkline": [
+        271,
+        54
+      ],
+      "bars": [
+        {
+          "date": "2026-05-21",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-22",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-23",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-24",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-25",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-26",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-27",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-28",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-29",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-30",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-31",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-01",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-02",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-03",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-04",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-05",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-06",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-07",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-08",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-09",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-10",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-11",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-12",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-13",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-14",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-15",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-16",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-17",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-18",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-19",
+          "uptime": 100
+        }
+      ]
+    },
+    {
+      "slug": "toro-status-page",
+      "name": "TORO Status Page",
+      "type": "http",
+      "icon": "https://status.torosaba.net/logo.png",
+      "target": "https://status.torosaba.net/",
+      "url": "https://status.torosaba.net/",
+      "status": "up",
+      "responseTime": 51,
+      "players": null,
+      "version": null,
+      "lastChecked": "2026-06-19T11:45:08.000Z",
+      "error": null,
+      "uptime": {
+        "24h": 100,
+        "7d": 100,
+        "30d": 100,
+        "all": 100
+      },
+      "avgResponseTime": {
+        "24h": 162,
+        "7d": 162,
+        "30d": 162,
+        "all": 162
+      },
+      "sparkline": [
+        273,
+        51
+      ],
+      "bars": [
+        {
+          "date": "2026-05-21",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-22",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-23",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-24",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-25",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-26",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-27",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-28",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-29",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-30",
+          "uptime": null
+        },
+        {
+          "date": "2026-05-31",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-01",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-02",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-03",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-04",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-05",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-06",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-07",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-08",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-09",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-10",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-11",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-12",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-13",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-14",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-15",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-16",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-17",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-18",
+          "uptime": null
+        },
+        {
+          "date": "2026-06-19",
+          "uptime": 100
+        }
+      ]
+    }
+  ]
+}

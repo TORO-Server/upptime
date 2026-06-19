@@ -1,0 +1,69 @@
+name: Monitor
+
+on:
+  schedule:
+    # Every 10 minutes. GitHub may delay scheduled runs under load.
+    - cron: "*/10 * * * *"
+  workflow_dispatch:
+
+# Single workflow does everything: check -> commit data -> build -> deploy.
+# A shared concurrency group serializes runs so the data push never races.
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: monitor
+  cancel-in-progress: false
+
+jobs:
+  monitor:
+    name: Check, build & deploy
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Run status checks
+        run: node scripts/check.mjs
+
+      - name: Commit updated data
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add frontend/public/data
+          if git diff --staged --quiet; then
+            echo "No data changes to commit."
+          else
+            git commit -m "data: update status [skip ci]"
+            git push
+          fi
+
+      - name: Install dependencies
+        run: npm --prefix frontend ci
+
+      - name: Build site
+        run: npm --prefix frontend run build
+
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: frontend/dist
+
+      - name: Deploy to GitHub Pages
+        id: deploy
+        uses: actions/deploy-pages@v4
