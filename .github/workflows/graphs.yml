@@ -17,12 +17,15 @@
 name: Graphs CI
 on:
   workflow_run:
-    workflows: ["Uptime CI"]
+    workflows: ["Response Time CI"]
     types:
       - completed
   repository_dispatch:
     types: [graphs]
   workflow_dispatch:
+concurrency:
+  group: upptime-main-commit
+  cancel-in-progress: false
 jobs:
   release:
     name: Generate graphs
