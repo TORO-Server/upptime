@@ -1,8 +1,8 @@
-# 📈 TORO Status
+# TORO Status
 
 [![Monitor](https://github.com/TORO-Server/upptime/actions/workflows/monitor.yml/badge.svg)](https://github.com/TORO-Server/upptime/actions/workflows/monitor.yml)
 
-TORO サーバーの稼働状況ページです 👉 **https://status.torosaba.net**
+TORO サーバーの稼働状況ページです。**https://status.torosaba.net**
 
 Upptime をやめ、**Vue.js フロントエンド + GitHub Actions の独自実装**に置き換えました。
 監視・データ生成・ビルド・デプロイをすべて 1 本のワークフローで完結させているため、
@@ -47,7 +47,6 @@ npm run dev      # 開発サーバー
 npm run build    # 本番ビルド（dist/ に data/ も同梱される）
 ```
 
-## メモ
+## 設定
 
-- 監視間隔は `.github/workflows/monitor.yml` の cron（既定 `*/10`）で変更できます。
-- 旧 Upptime のデータ（`history/`, `api/`, `graphs/`, `assets/`）は破壊せず残置しています。不要なら削除して構いません。
+- 監視間隔は [`.github/workflows/monitor.yml`](.github/workflows/monitor.yml) の cron（既定 `*/10 * * * *`）で変更できます。
