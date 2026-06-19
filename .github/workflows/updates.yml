@@ -16,8 +16,15 @@
 
 name: Updates CI
 on:
-  schedule:
-    - cron: "0 3 * * *"
+  # NOTE: The daily schedule is intentionally disabled.
+  # upptime/updates regenerates the workflow files from the template, which would
+  # revert the custom workflow_run chaining + concurrency fix in
+  # response-time.yml / graphs.yml / summary.yml and re-introduce the
+  # "! [rejected] main -> main (fetch first)" push race.
+  # Run this manually (Actions tab -> "Run workflow") when you intentionally
+  # want to pull template updates, then re-apply the chaining fix afterwards.
+  # schedule:
+  #   - cron: "0 3 * * *"
   repository_dispatch:
     types: [updates]
   workflow_dispatch:
