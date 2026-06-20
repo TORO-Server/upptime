@@ -33,10 +33,15 @@ jobs:
         with:
           node-version: 22
           cache: npm
-          cache-dependency-path: frontend/package-lock.json
+          cache-dependency-path: |
+            package-lock.json
+            frontend/package-lock.json
+
+      - name: Install monitor dependencies
+        run: npm ci
 
       - name: Run status checks
-        run: node scripts/check.mjs
+        run: npm run check
 
       - name: Commit updated data
         run: |
@@ -50,7 +55,7 @@ jobs:
             git push
           fi
 
-      - name: Install dependencies
+      - name: Install frontend dependencies
         run: npm --prefix frontend ci
 
       - name: Build site

@@ -1,17 +1,18 @@
-<script setup>
+<script setup lang="ts">
 import { computed } from "vue";
 
-const props = defineProps({
-  values: { type: Array, default: () => [] },
-});
+const props = withDefaults(
+  defineProps<{ values: (number | null)[] }>(),
+  { values: () => [] }
+);
 
 const W = 240;
 const H = 44;
 const P = 3;
 
-const segments = computed(() => {
+const segments = computed<string[] | null>(() => {
   const vals = props.values;
-  const nums = vals.filter((v) => typeof v === "number");
+  const nums = vals.filter((v): v is number => typeof v === "number");
   if (nums.length < 2) return null;
 
   const min = Math.min(...nums);
@@ -19,8 +20,8 @@ const segments = computed(() => {
   const range = max - min || 1;
   const n = vals.length;
 
-  const segs = [];
-  let cur = [];
+  const segs: string[][] = [];
+  let cur: string[] = [];
   vals.forEach((v, i) => {
     if (typeof v !== "number") {
       if (cur.length) {
@@ -54,7 +55,7 @@ const segments = computed(() => {
       vector-effect="non-scaling-stroke"
     />
   </svg>
-  <div v-else class="spark-empty">データ収集中…</div>
+  <div v-else class="spark-empty">▓▒░ データ収集中 ░▒▓</div>
 </template>
 
 <style scoped>
@@ -62,9 +63,11 @@ const segments = computed(() => {
   width: 100%;
   height: 44px;
   display: block;
+  background: #f2f5ff;
+  border: 1px solid var(--rule-soft);
 }
 .spark polyline {
-  stroke: var(--accent);
+  stroke: #0033cc;
   stroke-width: 1.5;
   stroke-linejoin: round;
   stroke-linecap: round;
@@ -74,7 +77,10 @@ const segments = computed(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.8rem;
-  color: var(--text-muted);
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--ink-soft);
+  background: #f2f5ff;
+  border: 1px solid var(--rule-soft);
 }
 </style>

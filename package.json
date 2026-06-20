@@ -1,0 +1,16 @@
+{
+  "name": "toro-status-monitor",
+  "private": true,
+  "version": "2.0.0",
+  "type": "module",
+  "description": "TORO Status — uptime checker (TypeScript). Writes data the Vue front-end reads.",
+  "scripts": {
+    "check": "tsx scripts/check.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.5",
+    "tsx": "^4.19.2",
+    "typescript": "^5.7.3"
+  }
+}

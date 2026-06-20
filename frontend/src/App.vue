@@ -1,20 +1,29 @@
-<script setup>
+<script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from "vue";
 import SiteCard from "./components/SiteCard.vue";
+import Marquee from "./components/Marquee.vue";
+import RetroNav from "./components/RetroNav.vue";
+import RetroDivider from "./components/RetroDivider.vue";
+import AboutBox from "./components/AboutBox.vue";
+import StatusBar from "./components/StatusBar.vue";
+import StatusReport from "./components/StatusReport.vue";
+import LinksSection from "./components/LinksSection.vue";
+import { fmtDateJp, fmtDateTimeJp } from "./utils/jst.ts";
+import type { Summary, Status } from "./types.ts";
 
-const data = ref(null);
+const data = ref<Summary | null>(null);
 const error = ref(false);
 const loading = ref(true);
-let timer = null;
+let timer: ReturnType<typeof setInterval> | null = null;
 
-async function load() {
+async function load(): Promise<void> {
   try {
     const url = `${import.meta.env.BASE_URL}data/summary.json?_=${Date.now()}`;
     const res = await fetch(url, { cache: "no-store" });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    data.value = await res.json();
+    data.value = (await res.json()) as Summary;
     error.value = false;
-  } catch (e) {
+  } catch {
     error.value = true;
   } finally {
     loading.value = false;
@@ -22,122 +31,262 @@ async function load() {
 }
 
 onMounted(() => {
-  load();
-  timer = setInterval(load, 60000);
+  void load();
+  timer = setInterval(() => void load(), 60000);
 });
-onUnmounted(() => clearInterval(timer));
+onUnmounted(() => {
+  if (timer) clearInterval(timer);
+});
 
-const overall = computed(() => {
+const github = computed(
+  () => data.value?.github ?? "https://github.com/TORO-Server/upptime"
+);
+
+const navItems = computed(() => [
+  { label: "トップ", href: "#top" },
+  { label: "現在の稼働状況", href: "#status" },
+  { label: "このサイトについて", href: "#about" },
+  { label: "サービス一覧", href: "#services" },
+  { label: "稼働レポート", href: "#report" },
+  { label: "関連リンク", href: "#links" },
+  { label: "お問い合わせ", href: `${github.value}/discussions`, external: true },
+  { label: "ソースコード", href: github.value, external: true },
+]);
+
+const overall = computed<{ key: Status; text: string }>(() => {
   const sites = data.value?.sites ?? [];
   if (sites.length === 0) return { key: "up", text: "—" };
   const down = sites.filter((s) => s.status === "down").length;
   const degraded = sites.filter((s) => s.status === "degraded").length;
-  if (down === sites.length) return { key: "down", text: "全システム停止中" };
-  if (down > 0) return { key: "down", text: "一部のシステムで障害が発生しています" };
-  if (degraded > 0) return { key: "degraded", text: "一部でパフォーマンスが低下しています" };
-  return { key: "up", text: "すべてのシステムは正常に稼働中" };
+  if (down === sites.length)
+    return { key: "down", text: "すべてのサービスが停止しています" };
+  if (down > 0)
+    return { key: "down", text: "一部のサービスで障害が発生しています" };
+  if (degraded > 0)
+    return { key: "degraded", text: "一部のサービスで応答が遅延しています" };
+  return { key: "up", text: "すべてのサービスが正常に稼働しています" };
 });
 
-const updatedAt = computed(() => {
-  if (!data.value?.generatedAt) return "";
-  const d = new Date(data.value.generatedAt);
-  return d.toLocaleString("ja-JP", {
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-});
+const updatedAt = computed(() =>
+  data.value?.generatedAt ? fmtDateTimeJp(data.value.generatedAt) : ""
+);
+const updatedDate = computed(() =>
+  data.value?.generatedAt ? fmtDateJp(data.value.generatedAt) : ""
+);
+const thisYear = computed(() =>
+  data.value?.generatedAt
+    ? new Date(data.value.generatedAt).getFullYear()
+    : new Date().getFullYear()
+);
 </script>
 
 <template>
   <div class="page">
-    <header class="header">
-      <img
-        v-if="data?.logoUrl"
-        class="logo"
-        :src="data.logoUrl"
-        alt=""
-        @error="(e) => (e.target.style.display = 'none')"
+    <div class="frame">
+      <!-- ===== 見出し ===== -->
+      <header id="top" class="masthead">
+        <h1 class="rainbow glow">{{ data?.name || "TORO Status" }}</h1>
+        <p class="subtitle">TORO サーバー 稼働状況モニター</p>
+        <p class="intro">
+          TORO
+          サーバーで提供する各サービスの稼働状況を、リアルタイムに監視・公開しています。障害や遅延が発生した場合は、本ページに反映されます。
+        </p>
+        <p v-if="updatedAt" class="updated">最終更新：{{ updatedAt }}</p>
+      </header>
+
+      <Marquee
+        text="TORO サーバー 稼働状況モニター ／ 各サービスの稼働状況を24時間自動で監視しています ／ 障害・メンテナンス情報は本ページにてお知らせいたします"
       />
-      <h1>{{ data?.name || "TORO Status" }}</h1>
-      <p v-if="data?.intro?.title" class="intro-title">{{ data.intro.title }}</p>
-      <p v-if="data?.intro?.message" class="intro-msg">{{ data.intro.message }}</p>
-    </header>
 
-    <div v-if="loading" class="state">読込中…</div>
-
-    <div v-else-if="error" class="state error">
-      ステータスデータの取得に失敗しました。しばらくしてから再度お試しください。
-    </div>
-
-    <template v-else>
-      <div class="banner" :class="overall.key">
-        <span class="banner-dot" />
-        {{ overall.text }}
+      <div v-if="loading" class="state">読み込み中です…</div>
+      <div v-else-if="error" class="state error">
+        ステータスデータの読み込みに失敗しました。<br />
+        しばらく経ってから再度お試しください。
       </div>
 
-      <main class="grid">
-        <SiteCard v-for="s in data.sites" :key="s.slug" :site="s" />
-      </main>
+      <div v-else class="cols">
+        <!-- ===== 左メニュー ===== -->
+        <aside class="col-nav">
+          <RetroNav :items="navItems" :last-update="updatedDate" />
+        </aside>
 
-      <footer class="footer">
-        <span v-if="updatedAt">最終更新: {{ updatedAt }}</span>
-        <span class="sep">·</span>
-        <span>独自実装 (Vue.js + GitHub Actions)</span>
-        <span class="sep">·</span>
-        <a v-if="data?.github" :href="data.github" target="_blank" rel="noopener">GitHub</a>
+        <!-- ===== 本文 ===== -->
+        <main class="col-body">
+          <!-- 現在の稼働状況 -->
+          <section id="status" class="sec">
+            <h2 class="jp-head">■ 現在の稼働状況</h2>
+            <div class="banner" :class="overall.key">
+              <span class="banner-dot" />{{ overall.text }}
+            </div>
+            <div class="panel">
+              <StatusBar
+                :sites="data?.sites ?? []"
+                :generated-at="data?.generatedAt ?? null"
+              />
+            </div>
+          </section>
+
+          <RetroDivider variant="wave" />
+
+          <!-- このサイトについて -->
+          <section id="about" class="sec">
+            <h2 class="jp-head">■ このサイトについて</h2>
+            <div class="panel"><AboutBox :github="github" /></div>
+          </section>
+
+          <RetroDivider variant="double" />
+
+          <!-- サービス一覧 -->
+          <section id="services" class="sec">
+            <h2 class="jp-head">■ サービス一覧</h2>
+            <div class="grid">
+              <SiteCard v-for="s in data?.sites" :key="s.slug" :site="s" />
+            </div>
+          </section>
+
+          <RetroDivider variant="star" />
+
+          <!-- 稼働レポート -->
+          <section id="report" class="sec">
+            <h2 class="jp-head">■ 稼働レポート</h2>
+            <div class="panel">
+              <StatusReport
+                :sites="data?.sites ?? []"
+                :generated-at="data?.generatedAt ?? null"
+              />
+            </div>
+          </section>
+
+          <RetroDivider variant="wave" />
+
+          <!-- 関連リンク -->
+          <section id="links" class="sec">
+            <h2 class="jp-head">■ 関連リンク</h2>
+            <div class="panel"><LinksSection :github="github" /></div>
+          </section>
+        </main>
+      </div>
+
+      <!-- ===== フッター ===== -->
+      <footer class="foot">
+        <div class="foot__rule">──────────────────────────</div>
+        <p>本ページは TORO サーバー運営チームが提供する公式ステータスページです。</p>
+        <p class="foot__sub">
+          Since 2024<span v-if="updatedAt"> ／ 最終更新 {{ updatedAt }}</span><br />
+          Powered by TypeScript · Vue.js · GitHub Actions
+        </p>
+        <p class="foot__tech">© {{ thisYear }} TORO Server. All rights reserved.</p>
+        <div class="foot__rule">──────────────────────────</div>
       </footer>
-    </template>
+    </div>
   </div>
 </template>
 
 <style scoped>
 .page {
-  max-width: 920px;
+  max-width: 980px;
   margin: 0 auto;
-  padding: 40px 20px 60px;
+  padding: 16px 10px 44px;
 }
-.header {
+.frame {
+  background: var(--paper);
+  border: 3px double var(--rule);
+  box-shadow: 0 0 0 1px #fff, 0 6px 30px rgba(0, 0, 0, 0.5);
+  padding: 12px 14px 18px;
+}
+
+/* ---- masthead ---- */
+.masthead {
   text-align: center;
-  margin-bottom: 28px;
+  padding: 8px 4px 12px;
+  border-bottom: 1px dashed var(--rule-soft);
+  scroll-margin-top: 12px;
 }
-.logo {
-  height: 64px;
-  width: auto;
-  margin-bottom: 12px;
-}
-.header h1 {
+.masthead h1 {
   margin: 0 0 6px;
-  font-size: 1.9rem;
+  font-size: clamp(2rem, 7vw, 3.2rem);
+  font-weight: 900;
+  letter-spacing: 0.04em;
 }
-.intro-title {
-  margin: 4px 0 2px;
-  font-weight: 600;
+.subtitle {
+  margin: 0 0 8px;
+  font-family: var(--mono);
+  color: var(--rule);
+  font-weight: bold;
+  letter-spacing: 0.04em;
 }
-.intro-msg {
-  margin: 0;
-  color: var(--text-muted);
+.intro {
+  margin: 0 auto 6px;
+  max-width: 760px;
+  color: var(--ink);
   font-size: 0.92rem;
+  line-height: 1.8;
 }
-.state {
-  text-align: center;
-  padding: 60px 20px;
-  color: var(--text-muted);
+.updated {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  color: var(--ink-soft);
 }
-.state.error {
-  color: var(--down);
+
+/* ---- columns ---- */
+.cols {
+  display: grid;
+  grid-template-columns: 184px 1fr;
+  gap: 14px;
+  padding-top: 12px;
 }
+.col-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-self: start;
+  position: sticky;
+  top: 8px;
+}
+.col-body {
+  min-width: 0;
+}
+@media (max-width: 720px) {
+  .cols {
+    grid-template-columns: 1fr;
+  }
+  .col-nav {
+    position: static;
+  }
+}
+
+/* ---- panel + heading ---- */
+.panel {
+  background: var(--paper);
+  border: 1px solid var(--rule-soft);
+  padding: 10px 12px;
+}
+.sec {
+  scroll-margin-top: 12px;
+  margin: 2px 0;
+}
+.jp-head {
+  margin: 6px 0 8px;
+  padding: 4px 10px;
+  font-size: 1.02rem;
+  color: var(--rule);
+  background: var(--paper-head);
+  border-left: 6px solid #c01a5b;
+  border-bottom: 1px solid var(--rule-soft);
+}
+
+/* ---- status banner ---- */
 .banner {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
-  padding: 14px 18px;
-  border-radius: var(--radius);
-  font-weight: 600;
-  margin-bottom: 24px;
+  padding: 8px 14px;
+  font-weight: bold;
+  margin: 0 0 12px;
+  border: 2px ridge;
+  font-family: "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
 }
 .banner-dot {
   width: 12px;
@@ -147,34 +296,104 @@ const updatedAt = computed(() => {
 }
 .banner.up {
   color: var(--up);
-  background: var(--up-bg);
+  background: #eafff1;
+  border-color: var(--up);
 }
 .banner.degraded {
   color: var(--degraded);
-  background: var(--degraded-bg);
+  background: #fff7e0;
+  border-color: var(--degraded);
 }
 .banner.down {
   color: var(--down);
-  background: var(--down-bg);
+  background: #ffecec;
+  border-color: var(--down);
+  animation: alarm 1s steps(2, start) infinite;
 }
+@keyframes alarm {
+  50% {
+    background: #ffd6d6;
+  }
+}
+
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
-  gap: 16px;
+  grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+  gap: 12px;
 }
-@media (max-width: 480px) {
+@media (max-width: 460px) {
   .grid {
     grid-template-columns: 1fr;
   }
 }
-.footer {
-  margin-top: 32px;
+
+/* ---- footer ---- */
+.foot {
+  margin-top: 16px;
   text-align: center;
-  color: var(--text-muted);
+  color: var(--ink);
   font-size: 0.82rem;
 }
-.footer .sep {
-  margin: 0 8px;
-  opacity: 0.5;
+.foot__rule {
+  color: var(--rule-soft);
+  font-family: var(--mono);
+  overflow: hidden;
+  white-space: nowrap;
+}
+.foot p {
+  margin: 8px 0;
+}
+.foot__sub {
+  color: var(--ink-soft);
+  font-size: 0.76rem;
+}
+.foot__tech {
+  font-family: var(--mono);
+  color: var(--ink-soft);
+  font-size: 0.74rem;
+}
+
+/* ---- retro title (design 維持) ---- */
+.rainbow {
+  background: linear-gradient(
+    90deg,
+    #ff0040,
+    #ff8c00,
+    #ffd000,
+    #00b050,
+    #0080ff,
+    #6a3cff,
+    #ff00aa,
+    #ff0040
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: rainbow-shift 6s linear infinite;
+}
+@keyframes rainbow-shift {
+  to {
+    background-position: 200% center;
+  }
+}
+.glow {
+  filter: drop-shadow(1px 1px 0 rgba(0, 0, 0, 0.25));
+}
+.state {
+  text-align: center;
+  padding: 40px 16px;
+  font-family: var(--mono);
+  color: var(--rule);
+}
+.state.error {
+  color: var(--down);
+}
+@media (prefers-reduced-motion: reduce) {
+  .rainbow,
+  .banner.down {
+    animation: none;
+  }
 }
 </style>
