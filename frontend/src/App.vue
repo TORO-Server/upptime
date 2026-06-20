@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { ref, computed, onMounted, onUnmounted } from "vue";
 import SiteCard from "./components/SiteCard.vue";
-import ServerRoom from "./components/ServerRoom.vue";
 import Marquee from "./components/Marquee.vue";
 import RetroNav from "./components/RetroNav.vue";
 import RetroDivider from "./components/RetroDivider.vue";
@@ -15,9 +14,7 @@ import type { Summary, Status } from "./types.ts";
 const data = ref<Summary | null>(null);
 const error = ref(false);
 const loading = ref(true);
-const selectedSlug = ref<string | null>(null);
 let timer: ReturnType<typeof setInterval> | null = null;
-let flashTimer: ReturnType<typeof setTimeout> | null = null;
 
 async function load(): Promise<void> {
   try {
@@ -39,7 +36,6 @@ onMounted(() => {
 });
 onUnmounted(() => {
   if (timer) clearInterval(timer);
-  if (flashTimer) clearTimeout(flashTimer);
 });
 
 const github = computed(
@@ -48,22 +44,14 @@ const github = computed(
 
 const navItems = computed(() => [
   { label: "トップ", href: "#top" },
+  { label: "現在の稼働状況", href: "#status" },
   { label: "このサイトについて", href: "#about" },
-  { label: "サーバー状況", href: "#server-room" },
   { label: "サービス一覧", href: "#services" },
   { label: "稼働レポート", href: "#report" },
   { label: "関連リンク", href: "#links" },
   { label: "お問い合わせ", href: `${github.value}/discussions`, external: true },
   { label: "ソースコード", href: github.value, external: true },
 ]);
-
-const roomSites = computed(() =>
-  (data.value?.sites ?? []).map((s) => ({
-    slug: s.slug,
-    name: s.name,
-    status: s.status,
-  }))
-);
 
 const overall = computed<{ key: Status; text: string }>(() => {
   const sites = data.value?.sites ?? [];
@@ -90,14 +78,6 @@ const thisYear = computed(() =>
     ? new Date(data.value.generatedAt).getFullYear()
     : new Date().getFullYear()
 );
-
-function onSelect(slug: string): void {
-  selectedSlug.value = slug;
-  const el = document.getElementById(`site-${slug}`);
-  el?.scrollIntoView({ behavior: "smooth", block: "center" });
-  if (flashTimer) clearTimeout(flashTimer);
-  flashTimer = setTimeout(() => (selectedSlug.value = null), 2600);
-}
 </script>
 
 <template>
@@ -132,26 +112,12 @@ function onSelect(slug: string): void {
 
         <!-- ===== 本文 ===== -->
         <main class="col-body">
-          <!-- このサイトについて -->
-          <section id="about" class="sec">
-            <h2 class="jp-head">■ このサイトについて</h2>
-            <div class="panel"><AboutBox :github="github" /></div>
-          </section>
-
-          <RetroDivider variant="wave" />
-
-          <!-- サーバー状況(3D) -->
-          <section id="server-room" class="sec wafu">
-            <h2 class="wafu__bar">【 サーバー稼働状況 3Dビュー 】</h2>
-            <div class="wafu__screen">
-              <ServerRoom :sites="roomSites" @select="onSelect" />
+          <!-- 現在の稼働状況 -->
+          <section id="status" class="sec">
+            <h2 class="jp-head">■ 現在の稼働状況</h2>
+            <div class="banner" :class="overall.key">
+              <span class="banner-dot" />{{ overall.text }}
             </div>
-            <p class="wafu__legend">
-              各サービスの稼働状況を3Dで可視化しています。マウス操作で視点を変更できます。<br />
-              <b class="led-g">●緑＝正常</b>
-              ／ <b class="led-y">●黄＝低下</b>
-              ／ <b class="led-r">●赤＝停止</b>
-            </p>
             <div class="panel">
               <StatusBar
                 :sites="data?.sites ?? []"
@@ -160,21 +126,21 @@ function onSelect(slug: string): void {
             </div>
           </section>
 
+          <RetroDivider variant="wave" />
+
+          <!-- このサイトについて -->
+          <section id="about" class="sec">
+            <h2 class="jp-head">■ このサイトについて</h2>
+            <div class="panel"><AboutBox :github="github" /></div>
+          </section>
+
           <RetroDivider variant="double" />
 
           <!-- サービス一覧 -->
           <section id="services" class="sec">
-            <h2 class="jp-head">■ サービス一覧（現在の稼働状況）</h2>
-            <div class="banner" :class="overall.key">
-              <span class="banner-dot" />{{ overall.text }}
-            </div>
+            <h2 class="jp-head">■ サービス一覧</h2>
             <div class="grid">
-              <SiteCard
-                v-for="s in data?.sites"
-                :key="s.slug"
-                :site="s"
-                :flash="s.slug === selectedSlug"
-              />
+              <SiteCard v-for="s in data?.sites" :key="s.slug" :site="s" />
             </div>
           </section>
 
@@ -207,7 +173,7 @@ function onSelect(slug: string): void {
         <p>本ページは TORO サーバー運営チームが提供する公式ステータスページです。</p>
         <p class="foot__sub">
           Since 2024<span v-if="updatedAt"> ／ 最終更新 {{ updatedAt }}</span><br />
-          Powered by TypeScript · Vue.js · three.js · GitHub Actions
+          Powered by TypeScript · Vue.js · GitHub Actions
         </p>
         <p class="foot__tech">© {{ thisYear }} TORO Server. All rights reserved.</p>
         <div class="foot__rule">──────────────────────────</div>
@@ -359,37 +325,6 @@ function onSelect(slug: string): void {
   .grid {
     grid-template-columns: 1fr;
   }
-}
-
-/* ---- 3D 枠 ---- */
-.wafu__bar {
-  margin: 0;
-  padding: 5px 10px;
-  font-size: 1.02rem;
-  color: #fff;
-  background: linear-gradient(90deg, #1a2a6b, #3a4a86);
-  border: 1px solid var(--rule);
-  text-align: center;
-  letter-spacing: 0.06em;
-}
-.wafu__screen {
-  border: 2px inset #cfd6f0;
-  background: #02030a;
-}
-.wafu__legend {
-  margin: 6px 0 10px;
-  font-size: 0.86rem;
-  color: var(--ink);
-  text-align: center;
-}
-.led-g {
-  color: var(--up);
-}
-.led-y {
-  color: var(--degraded);
-}
-.led-r {
-  color: var(--down);
 }
 
 /* ---- footer ---- */

@@ -5,15 +5,4 @@ import vue from "@vitejs/plugin-vue";
 export default defineConfig({
   plugins: [vue()],
   base: "/",
-  build: {
-    // three.js is large; raise the warning ceiling and split it into its own chunk.
-    chunkSizeWarningLimit: 900,
-    rollupOptions: {
-      output: {
-        manualChunks: {
-          three: ["three"],
-        },
-      },
-    },
-  },
 });
