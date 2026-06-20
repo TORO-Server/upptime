@@ -71,4 +71,31 @@ const rows: { k: string; v: string }[] = [
   color: var(--rule);
   font-weight: bold;
 }
+
+@media (max-width: 540px) {
+  .about__table,
+  .about__table tbody,
+  .about__table tr,
+  .about__table th,
+  .about__table td {
+    display: block;
+    width: 100%;
+  }
+  .about__table tr {
+    border-bottom: 2px solid var(--rule);
+  }
+  .about__table tr:last-child {
+    border-bottom: 0;
+  }
+  .about__table th {
+    background: var(--paper-alt);
+    border-bottom: 0;
+    padding-bottom: 2px;
+  }
+  .about__table td {
+    border-top: 0;
+    padding-top: 2px;
+    padding-bottom: 8px;
+  }
+}
 </style>

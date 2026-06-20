@@ -246,15 +246,16 @@ function avgRtOf(points: HistoryPoint[], sinceSec: number | null): number | null
 }
 
 function dailyBars(points: HistoryPoint[], days: number, nowSec: number): DayBar[] {
-  // Per-UTC-day uptime fraction for the last `days` days (oldest -> newest).
+  // Per-JST-day uptime fraction for the last `days` days (oldest -> newest).
   const bars: DayBar[] = [];
-  const todayStart = Math.floor(nowSec / DAY) * DAY;
+  const JST_OFFSET = 9 * 3600; // 9 hours in seconds
+  const todayStart = Math.floor((nowSec + JST_OFFSET) / DAY) * DAY - JST_OFFSET;
   for (let i = days - 1; i >= 0; i--) {
     const dayStart = todayStart - i * DAY;
     const dayEnd = dayStart + DAY;
     const inDay = points.filter((p) => p.t >= dayStart && p.t < dayEnd);
     bars.push({
-      date: new Date(dayStart * 1000).toISOString().slice(0, 10),
+      date: new Date((dayStart + JST_OFFSET) * 1000).toISOString().slice(0, 10),
       uptime: inDay.length
         ? Math.round(
             (inDay.filter((p) => p.s !== "down").length / inDay.length) * 10000
@@ -329,7 +330,7 @@ async function checkSite(
     type: site.type,
     icon: site.icon ?? null,
     target,
-    url: site.type === "http" ? site.url ?? null : null,
+    url: site.url ?? null,
     status,
     responseTime: check.responseTime ?? null,
     players: site.type === "minecraft" ? check.players ?? null : null,

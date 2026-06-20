@@ -95,4 +95,33 @@ defineProps<{ items: NavItem[]; lastUpdate?: string }>();
     animation: none;
   }
 }
+
+@media (max-width: 720px) {
+  .nav {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 8px;
+  }
+  .nav__title,
+  .nav__rule,
+  .nav__live {
+    display: none;
+  }
+  .nav__list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 4px 10px;
+    width: 100%;
+  }
+  .nav__list li {
+    padding: 0;
+  }
+  .nav__upd {
+    font-size: 0.72rem;
+    margin-top: 2px;
+  }
+}
 </style>

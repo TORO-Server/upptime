@@ -41,8 +41,30 @@ function fmtRt(v: number | null | undefined): string {
       <span v-else class="icon icon--mono">{{ initials }}</span>
 
       <div class="title">
-        <div class="name">{{ site.name }}</div>
-        <div class="target">{{ site.target }}</div>
+        <div class="name">
+          <a
+            v-if="site.url"
+            :href="site.url"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="site-link"
+          >
+            {{ site.name }}<span class="ext-icon">↗</span>
+          </a>
+          <span v-else>{{ site.name }}</span>
+        </div>
+        <div class="target">
+          <a
+            v-if="site.url"
+            :href="site.url"
+            target="_blank"
+            rel="noopener noreferrer"
+            class="target-link"
+          >
+            {{ site.target }}
+          </a>
+          <span v-else>{{ site.target }}</span>
+        </div>
       </div>
       <span class="pill" :class="site.status">
         <span class="dot" />
@@ -236,5 +258,43 @@ function fmtRt(v: number | null | undefined): string {
   .card.flash {
     animation: none;
   }
+}
+
+@media (max-width: 420px) {
+  .name,
+  .target {
+    white-space: normal;
+    word-break: break-all;
+  }
+}
+
+@media (max-width: 360px) {
+  .stats {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px 6px;
+  }
+}
+
+.site-link {
+  color: inherit;
+  text-decoration: none;
+}
+.site-link:hover {
+  text-decoration: underline;
+  color: var(--rule);
+}
+.ext-icon {
+  font-size: 0.75em;
+  margin-left: 2px;
+  color: var(--ink-soft);
+  display: inline-block;
+  vertical-align: middle;
+}
+.target-link {
+  color: inherit;
+  text-decoration: none;
+}
+.target-link:hover {
+  text-decoration: underline;
 }
 </style>

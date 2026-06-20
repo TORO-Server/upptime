@@ -86,10 +86,9 @@ const thisYear = computed(() =>
       <!-- ===== 見出し ===== -->
       <header id="top" class="masthead">
         <h1 class="rainbow glow">{{ data?.name || "TORO Status" }}</h1>
-        <p class="subtitle">TORO サーバー 稼働状況モニター</p>
+        <p class="subtitle">{{ data?.intro?.title || "TORO サーバー 稼働状況モニター" }}</p>
         <p class="intro">
-          TORO
-          サーバーで提供する各サービスの稼働状況を、リアルタイムに監視・公開しています。障害や遅延が発生した場合は、本ページに反映されます。
+          {{ data?.intro?.message || "TORO サーバーで提供する各サービスの稼働状況を、リアルタイムに監視・公開しています。障害や遅延が発生した場合は、本ページに反映されます。" }}
         </p>
         <p v-if="updatedAt" class="updated">最終更新：{{ updatedAt }}</p>
       </header>
@@ -339,6 +338,7 @@ const thisYear = computed(() =>
   font-family: var(--mono);
   overflow: hidden;
   white-space: nowrap;
+  text-align: center;
 }
 .foot p {
   margin: 8px 0;
@@ -394,6 +394,15 @@ const thisYear = computed(() =>
   .rainbow,
   .banner.down {
     animation: none;
+  }
+}
+
+@media (max-width: 480px) {
+  .page {
+    padding: 8px 4px 24px;
+  }
+  .frame {
+    padding: 8px 8px 12px;
   }
 }
 </style>

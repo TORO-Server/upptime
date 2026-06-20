@@ -5,7 +5,7 @@
   "favicon": "https://status.torosaba.net/logo.png",
   "github": "https://github.com/TORO-Server/upptime",
   "intro": {
-    "title": "Crime な瞳でTOROサーバーの状態を監視します!",
+    "title": "つぶらな瞳でTOROサーバーの状態を監視します!",
     "message": "TOROサーバーで稼働しているサービスの状態を監視しています。"
   },
   "settings": {
@@ -20,7 +20,8 @@
       "type": "minecraft",
       "host": "torosaba.net",
       "port": 27248,
-      "icon": "https://status.torosaba.net/toro.png"
+      "icon": "https://status.torosaba.net/toro.png",
+      "url": "https://torosaba.net/"
     },
     {
       "slug": "toro-minecraft-server-minuma",
@@ -28,7 +29,8 @@
       "type": "minecraft",
       "host": "minuma.torosaba.net",
       "port": 27248,
-      "icon": "https://status.torosaba.net/minuma.png"
+      "icon": "https://status.torosaba.net/minuma.png",
+      "url": "https://torosaba.net/"
     },
     {
       "slug": "toro-minecraft-server-lgb",
@@ -36,7 +38,8 @@
       "type": "minecraft",
       "host": "lgb.torosaba.net",
       "port": 27248,
-      "icon": "https://status.torosaba.net/lgbtoro.png"
+      "icon": "https://status.torosaba.net/lgbtoro.png",
+      "url": "https://torosaba.net/"
     },
     {
       "slug": "toro-minecraft-server-doro",
@@ -44,7 +47,8 @@
       "type": "minecraft",
       "host": "doro.torosaba.net",
       "port": 27248,
-      "icon": "https://status.torosaba.net/doro.png"
+      "icon": "https://status.torosaba.net/doro.png",
+      "url": "https://torosaba.net/"
     },
     {
       "slug": "toro-minecraft-server-toto",
@@ -52,7 +56,8 @@
       "type": "minecraft",
       "host": "toto.torosaba.net",
       "port": 27248,
-      "icon": "https://status.torosaba.net/toto.png"
+      "icon": "https://status.torosaba.net/toto.png",
+      "url": "https://torosaba.net/"
     },
     {
       "slug": "toro-dynmap",
