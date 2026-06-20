@@ -4,18 +4,13 @@ import SiteCard from "./components/SiteCard.vue";
 import ServerRoom from "./components/ServerRoom.vue";
 import Marquee from "./components/Marquee.vue";
 import RetroNav from "./components/RetroNav.vue";
-import AccessCounter from "./components/AccessCounter.vue";
-import KiribanNotice from "./components/KiribanNotice.vue";
-import KanrininDiary from "./components/KanrininDiary.vue";
-import ProfileBox from "./components/ProfileBox.vue";
-import LinksSection from "./components/LinksSection.vue";
-import LivelinessMeter from "./components/LivelinessMeter.vue";
 import RetroDivider from "./components/RetroDivider.vue";
-import UnderConstruction from "./components/UnderConstruction.vue";
-import { fmtDateJp, fmtDateTimeJp, daysBetween } from "./utils/jst.ts";
+import AboutBox from "./components/AboutBox.vue";
+import StatusBar from "./components/StatusBar.vue";
+import StatusReport from "./components/StatusReport.vue";
+import LinksSection from "./components/LinksSection.vue";
+import { fmtDateJp, fmtDateTimeJp } from "./utils/jst.ts";
 import type { Summary, Status } from "./types.ts";
-
-const SINCE = "2024-11-01T00:00:00+09:00";
 
 const data = ref<Summary | null>(null);
 const error = ref(false);
@@ -52,14 +47,14 @@ const github = computed(
 );
 
 const navItems = computed(() => [
-  { label: "とっぷ", href: "#top" },
-  { label: "ぷろふぃーる", href: "#about" },
-  { label: "さーばのようす", href: "#server-room" },
-  { label: "さーびすいちらん", href: "#services" },
-  { label: "こうしんりれき", href: "#diary" },
-  { label: "りんく", href: "#links" },
-  { label: "けいじばん", href: `${github.value}/discussions`, external: true },
-  { label: "そーすこーど", href: github.value, external: true },
+  { label: "トップ", href: "#top" },
+  { label: "このサイトについて", href: "#about" },
+  { label: "サーバー状況", href: "#server-room" },
+  { label: "サービス一覧", href: "#services" },
+  { label: "稼働レポート", href: "#report" },
+  { label: "関連リンク", href: "#links" },
+  { label: "お問い合わせ", href: `${github.value}/discussions`, external: true },
+  { label: "ソースコード", href: github.value, external: true },
 ]);
 
 const roomSites = computed(() =>
@@ -75,10 +70,13 @@ const overall = computed<{ key: Status; text: string }>(() => {
   if (sites.length === 0) return { key: "up", text: "—" };
   const down = sites.filter((s) => s.status === "down").length;
   const degraded = sites.filter((s) => s.status === "degraded").length;
-  if (down === sites.length) return { key: "down", text: "ぜんぶ おやすみ中です…(T_T)" };
-  if (down > 0) return { key: "down", text: "いちぶ ダウンしています ごめんなさい m(_ _)m" };
-  if (degraded > 0) return { key: "degraded", text: "いちぶ ちょっと不調かも (´・ω・`)" };
-  return { key: "up", text: "ぜんぶ げんきに かどう中です！(^o^)/" };
+  if (down === sites.length)
+    return { key: "down", text: "すべてのサービスが停止しています" };
+  if (down > 0)
+    return { key: "down", text: "一部のサービスで障害が発生しています" };
+  if (degraded > 0)
+    return { key: "degraded", text: "一部のサービスで応答が遅延しています" };
+  return { key: "up", text: "すべてのサービスが正常に稼働しています" };
 });
 
 const updatedAt = computed(() =>
@@ -86,9 +84,6 @@ const updatedAt = computed(() =>
 );
 const updatedDate = computed(() =>
   data.value?.generatedAt ? fmtDateJp(data.value.generatedAt) : ""
-);
-const openDays = computed(() =>
-  daysBetween(SINCE, data.value?.generatedAt ?? new Date())
 );
 const thisYear = computed(() =>
   data.value?.generatedAt
@@ -108,70 +103,57 @@ function onSelect(slug: string): void {
 <template>
   <div class="page">
     <div class="frame">
-      <!-- ===== 見出し / テキストサイト風口上 ===== -->
+      <!-- ===== 見出し ===== -->
       <header id="top" class="masthead">
-        <h1 class="rainbow glow">{{ data?.name || "TORO STATUS" }}</h1>
-        <p class="kojo">
-          ようこそ！TORO サーバー　かどうじょうきょうの　コーナーへ！！<br />
-          ここは 管理人が <span class="big">毎　日　せっせと</span><br />
-          サーバーの 生死を 見守る　<span class="pink">ヒミツの 観測所</span>　なのれす。<br />
-          <span class="soft">…まあ、たいてい　元気なんですけどね (´ー｀)</span>
+        <h1 class="rainbow glow">{{ data?.name || "TORO Status" }}</h1>
+        <p class="subtitle">TORO サーバー 稼働状況モニター</p>
+        <p class="intro">
+          TORO
+          サーバーで提供する各サービスの稼働状況を、リアルタイムに監視・公開しています。障害や遅延が発生した場合は、本ページに反映されます。
         </p>
-        <p class="since">
-          Since 2024.11.01 ／ 開設 <b>{{ openDays }}</b> 日目
-          <template v-if="updatedDate"> ／ さいしゅうこうしん {{ updatedDate }}</template>
-        </p>
+        <p v-if="updatedAt" class="updated">最終更新：{{ updatedAt }}</p>
       </header>
 
       <Marquee
-        text="★彡 いらっしゃいませ〜 当サイトは TORO サーバーの かどうじょうきょうを 24時間 みまもる こじんサイトです ／／ キリ番ふんだら けいじばんへ ほうこくしてね ／／ ゆっくりしていってね (^o^)丿 彡★"
+        text="TORO サーバー 稼働状況モニター ／ 各サービスの稼働状況を24時間自動で監視しています ／ 障害・メンテナンス情報は本ページにてお知らせいたします"
       />
 
-      <div v-if="loading" class="state">▓▒░ NOW LOADING … よみこみ中 ░▒▓</div>
+      <div v-if="loading" class="state">読み込み中です…</div>
       <div v-else-if="error" class="state error">
-        ⚠ ステータスデータの よみこみに しっぱいしました。<br />
-        しばらくしてから もういちど おためしください m(_ _)m
+        ステータスデータの読み込みに失敗しました。<br />
+        しばらく経ってから再度お試しください。
       </div>
 
       <div v-else class="cols">
         <!-- ===== 左メニュー ===== -->
         <aside class="col-nav">
           <RetroNav :items="navItems" :last-update="updatedDate" />
-          <div class="panel">
-            <AccessCounter />
-          </div>
         </aside>
 
         <!-- ===== 本文 ===== -->
         <main class="col-body">
-          <div class="panel">
-            <KiribanNotice :github="github" />
-          </div>
-
-          <RetroDivider variant="star" />
-
-          <!-- ぷろふぃーる -->
+          <!-- このサイトについて -->
           <section id="about" class="sec">
-            <h2 class="jp-head">■ ぷろふぃーる（かんりにん しょうかい）</h2>
-            <div class="panel"><ProfileBox :github="github" /></div>
+            <h2 class="jp-head">■ このサイトについて</h2>
+            <div class="panel"><AboutBox :github="github" /></div>
           </section>
 
           <RetroDivider variant="wave" />
 
-          <!-- うちのさーば(3D) -->
+          <!-- サーバー状況(3D) -->
           <section id="server-room" class="sec wafu">
-            <h2 class="wafu__bar">【 うちの さーば（自慢） 】</h2>
+            <h2 class="wafu__bar">【 サーバー稼働状況 3Dビュー 】</h2>
             <div class="wafu__screen">
               <ServerRoom :sites="roomSites" @select="onSelect" />
             </div>
             <p class="wafu__legend">
-              これが TORO のサーバ計算機です！マウスで ぐりぐり 動かせるよ (^^)<br />
-              <b class="led-g">●みどり＝げんき</b>
-              ／ <b class="led-y">●きいろ＝ちょっと不調</b>
-              ／ <b class="led-r">●あか＝おやすみ中</b>
+              各サービスの稼働状況を3Dで可視化しています。マウス操作で視点を変更できます。<br />
+              <b class="led-g">●緑＝正常</b>
+              ／ <b class="led-y">●黄＝低下</b>
+              ／ <b class="led-r">●赤＝停止</b>
             </p>
             <div class="panel">
-              <LivelinessMeter
+              <StatusBar
                 :sites="data?.sites ?? []"
                 :generated-at="data?.generatedAt ?? null"
               />
@@ -180,9 +162,9 @@ function onSelect(slug: string): void {
 
           <RetroDivider variant="double" />
 
-          <!-- さーびす いちらん -->
+          <!-- サービス一覧 -->
           <section id="services" class="sec">
-            <h2 class="jp-head">■ さーびす いちらん（ただいまの ようす）</h2>
+            <h2 class="jp-head">■ サービス一覧（現在の稼働状況）</h2>
             <div class="banner" :class="overall.key">
               <span class="banner-dot" />{{ overall.text }}
             </div>
@@ -198,47 +180,36 @@ function onSelect(slug: string): void {
 
           <RetroDivider variant="star" />
 
-          <!-- こうしんりれき / にっき -->
-          <section id="diary" class="sec">
-            <h2 class="jp-head">■ こうしんりれき ／ かんりにんの にっき</h2>
+          <!-- 稼働レポート -->
+          <section id="report" class="sec">
+            <h2 class="jp-head">■ 稼働レポート</h2>
             <div class="panel">
-              <KanrininDiary
+              <StatusReport
                 :sites="data?.sites ?? []"
                 :generated-at="data?.generatedAt ?? null"
               />
             </div>
           </section>
 
-          <RetroDivider variant="flower" />
+          <RetroDivider variant="wave" />
 
-          <!-- りんく -->
+          <!-- 関連リンク -->
           <section id="links" class="sec">
-            <h2 class="jp-head">■ りんく ／ 相互リンク募集中</h2>
+            <h2 class="jp-head">■ 関連リンク</h2>
             <div class="panel"><LinksSection :github="github" /></div>
           </section>
-
-          <UnderConstruction
-            label="このコーナーは ただいま製作中です。完成までしばらくお待ちくださいませ m(_ _)m"
-          />
         </main>
       </div>
 
-      <!-- ===== 和フッター ===== -->
+      <!-- ===== フッター ===== -->
       <footer class="foot">
         <div class="foot__rule">──────────────────────────</div>
-        <p>
-          このサイトは <b>とろ</b> が こじんてきに 運営しています。<br />
-          Netscape Navigator 4.0 ／ Internet Explorer 4.0 以上 推奨 ・
-          がめんかいぞうど 800×600 でごらんください。
-        </p>
+        <p>本ページは TORO サーバー運営チームが提供する公式ステータスページです。</p>
         <p class="foot__sub">
-          ♪ BGM：なし（このサイトは おとが でません。むかしは MIDI ながれてたのにね (^^;）<br />
-          <span v-if="updatedAt">さいしゅうチェック {{ updatedAt }} ・</span>
-          リンクフリー ・ Copyright(C) 1999-{{ thisYear }} TORO SERVER
+          Since 2024<span v-if="updatedAt"> ／ 最終更新 {{ updatedAt }}</span><br />
+          Powered by TypeScript · Vue.js · three.js · GitHub Actions
         </p>
-        <p class="foot__tech">
-          — powered by TypeScript + Vue.js + three.js + GitHub Actions —
-        </p>
+        <p class="foot__tech">© {{ thisYear }} TORO Server. All rights reserved.</p>
         <div class="foot__rule">──────────────────────────</div>
       </footer>
     </div>
@@ -266,38 +237,30 @@ function onSelect(slug: string): void {
   scroll-margin-top: 12px;
 }
 .masthead h1 {
-  margin: 0 0 8px;
+  margin: 0 0 6px;
   font-size: clamp(2rem, 7vw, 3.2rem);
   font-weight: 900;
   letter-spacing: 0.04em;
 }
-.kojo {
+.subtitle {
   margin: 0 0 8px;
+  font-family: var(--mono);
+  color: var(--rule);
+  font-weight: bold;
+  letter-spacing: 0.04em;
+}
+.intro {
+  margin: 0 auto 6px;
+  max-width: 760px;
   color: var(--ink);
-  font-size: 0.96rem;
-  line-height: 1.9;
+  font-size: 0.92rem;
+  line-height: 1.8;
 }
-.kojo .big {
-  font-size: 1.25em;
-  font-weight: bold;
-  color: #1d4ed8;
-}
-.kojo .pink {
-  color: #c01a5b;
-  font-weight: bold;
-}
-.kojo .soft {
-  color: var(--ink-soft);
-  font-size: 0.88em;
-}
-.since {
+.updated {
   margin: 0;
   font-family: var(--mono);
-  font-size: 0.76rem;
+  font-size: 0.78rem;
   color: var(--ink-soft);
-}
-.since b {
-  color: #c01a5b;
 }
 
 /* ---- columns ---- */
@@ -327,7 +290,7 @@ function onSelect(slug: string): void {
   }
 }
 
-/* ---- generic panel + heading ---- */
+/* ---- panel + heading ---- */
 .panel {
   background: var(--paper);
   border: 1px solid var(--rule-soft);
@@ -398,7 +361,7 @@ function onSelect(slug: string): void {
   }
 }
 
-/* ---- 3D の和枠 ---- */
+/* ---- 3D 枠 ---- */
 .wafu__bar {
   margin: 0;
   padding: 5px 10px;
@@ -455,7 +418,7 @@ function onSelect(slug: string): void {
   font-size: 0.74rem;
 }
 
-/* ---- retro text effects ---- */
+/* ---- retro title (design 維持) ---- */
 .rainbow {
   background: linear-gradient(
     90deg,

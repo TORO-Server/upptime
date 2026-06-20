@@ -7,9 +7,9 @@ import type { SiteSummary } from "../types.ts";
 const props = defineProps<{ site: SiteSummary; flash?: boolean }>();
 
 const STATUS_LABEL: Record<string, string> = {
-  up: "かどう中",
-  degraded: "ふちょう",
-  down: "ていし",
+  up: "稼働中",
+  degraded: "低下",
+  down: "停止",
 };
 
 // config の icon は 404 し得るのでモノグラムにフォールバック。
@@ -52,7 +52,7 @@ function fmtRt(v: number | null | undefined): string {
 
     <div class="meta">
       <span v-if="site.type === 'minecraft' && site.players">
-        👥 {{ site.players.online }}<span class="muted">/{{ site.players.max }}</span>
+        プレイヤー {{ site.players.online }}<span class="muted">/{{ site.players.max }}</span> 名
       </span>
       <span v-if="site.version" class="muted">{{ site.version }}</span>
       <span class="rt">{{ fmtRt(site.responseTime) }}</span>

@@ -10,25 +10,25 @@ defineProps<{ items: NavItem[]; lastUpdate?: string }>();
 
 <template>
   <nav class="nav">
-    <div class="nav__title">★ めにゅー ★</div>
+    <div class="nav__title">■ メニュー</div>
     <ul class="nav__list">
       <li v-for="(it, i) in items" :key="i">
         ・<a
           :href="it.href"
           :target="it.external ? '_blank' : undefined"
           :rel="it.external ? 'noopener' : undefined"
-          >[ {{ it.label }} ]</a
+          >{{ it.label }}</a
         ><span v-if="it.external" class="ext">↗</span>
       </li>
     </ul>
     <div class="nav__rule">─────────</div>
     <div v-if="lastUpdate" class="nav__upd">
-      こうしん<br />{{ lastUpdate }}
+      最終更新<br />{{ lastUpdate }}
     </div>
     <div class="nav__rule">─────────</div>
-    <div class="nav__rec">
-      <span class="rec-blink">●</span> REC<br />
-      24時間 かんし中
+    <div class="nav__live">
+      <span class="live-dot">●</span> 監視稼働中<br />
+      （24時間 自動）
     </div>
   </nav>
 </template>
@@ -76,22 +76,22 @@ defineProps<{ items: NavItem[]; lastUpdate?: string }>();
   color: var(--ink-soft);
   text-align: center;
 }
-.nav__rec {
+.nav__live {
   font-family: var(--mono);
   font-size: 0.72rem;
-  color: var(--down);
+  color: var(--up);
   text-align: center;
 }
-.rec-blink {
-  animation: rec 1s steps(2, start) infinite;
+.live-dot {
+  animation: live 1.4s steps(2, start) infinite;
 }
-@keyframes rec {
+@keyframes live {
   50% {
-    opacity: 0;
+    opacity: 0.25;
   }
 }
 @media (prefers-reduced-motion: reduce) {
-  .rec-blink {
+  .live-dot {
     animation: none;
   }
 }
