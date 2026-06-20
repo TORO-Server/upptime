@@ -7,15 +7,16 @@ import type { SiteSummary } from "../types.ts";
 const props = defineProps<{ site: SiteSummary; flash?: boolean }>();
 
 const STATUS_LABEL: Record<string, string> = {
-  up: "ONLINE",
-  degraded: "SLOW",
-  down: "OFFLINE",
+  up: "かどう中",
+  degraded: "ふちょう",
+  down: "ていし",
 };
 
-// Icons referenced in config may 404 — fall back to a monogram tile.
+// config の icon は 404 し得るのでモノグラムにフォールバック。
 const iconFailed = ref(false);
-const initials = computed(() =>
-  props.site.name.replace(/[^A-Za-z0-9]/g, "").slice(0, 2).toUpperCase() || "##"
+const initials = computed(
+  () =>
+    props.site.name.replace(/[^A-Za-z0-9]/g, "").slice(0, 2).toUpperCase() || "##"
 );
 
 function fmtUptime(v: number | null | undefined): string {
@@ -62,19 +63,19 @@ function fmtRt(v: number | null | undefined): string {
 
     <div class="stats">
       <div class="stat">
-        <span class="stat-label">24H</span>
+        <span class="stat-label">24時</span>
         <span class="stat-val">{{ fmtUptime(site.uptime["24h"]) }}</span>
       </div>
       <div class="stat">
-        <span class="stat-label">7D</span>
+        <span class="stat-label">7日</span>
         <span class="stat-val">{{ fmtUptime(site.uptime["7d"]) }}</span>
       </div>
       <div class="stat">
-        <span class="stat-label">30D</span>
+        <span class="stat-label">30日</span>
         <span class="stat-val">{{ fmtUptime(site.uptime["30d"]) }}</span>
       </div>
       <div class="stat">
-        <span class="stat-label">AVG</span>
+        <span class="stat-label">応答</span>
         <span class="stat-val">{{ fmtRt(site.avgResponseTime["30d"]) }}</span>
       </div>
     </div>
@@ -83,16 +84,21 @@ function fmtRt(v: number | null | undefined): string {
 
 <style scoped>
 .card {
-  background: #0a0c1c;
-  border: 3px outset #3a4470;
-  padding: 12px 14px;
+  background: var(--paper);
+  border: 1px solid var(--rule);
+  padding: 10px 12px;
   display: flex;
   flex-direction: column;
-  gap: 10px;
+  gap: 8px;
+  color: var(--ink);
   scroll-margin-top: 16px;
 }
+.card.degraded {
+  border-color: var(--degraded);
+}
 .card.down {
-  border-color: #6b1a22;
+  border-color: var(--down);
+  background: #fff5f5;
 }
 .card.flash {
   animation: card-flash 1.2s ease-out 2;
@@ -100,10 +106,10 @@ function fmtRt(v: number | null | undefined): string {
 @keyframes card-flash {
   0%,
   100% {
-    box-shadow: 0 0 0 transparent;
+    box-shadow: none;
   }
   50% {
-    box-shadow: 0 0 18px 2px #00ffe1;
+    box-shadow: 0 0 0 2px #ffd400, 0 0 14px #ffae00;
   }
 }
 .card-head {
@@ -112,22 +118,23 @@ function fmtRt(v: number | null | undefined): string {
   gap: 10px;
 }
 .icon {
-  width: 32px;
-  height: 32px;
+  width: 30px;
+  height: 30px;
   flex-shrink: 0;
-  border: 1px solid #2a3360;
+  border: 1px solid var(--rule-soft);
   object-fit: cover;
   image-rendering: pixelated;
+  background: #fff;
 }
 .icon--mono {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  background: #11173a;
-  color: #6cf;
-  font-family: "Courier New", monospace;
+  background: var(--paper-alt);
+  color: var(--rule);
+  font-family: var(--mono);
   font-weight: bold;
-  font-size: 0.8rem;
+  font-size: 0.78rem;
 }
 .title {
   min-width: 0;
@@ -135,15 +142,15 @@ function fmtRt(v: number | null | undefined): string {
 }
 .name {
   font-weight: bold;
-  color: #eaf0ff;
+  color: var(--ink);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 .target {
-  font-family: "Courier New", monospace;
-  font-size: 0.74rem;
-  color: #7c87b8;
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--ink-soft);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -151,9 +158,9 @@ function fmtRt(v: number | null | undefined): string {
 .pill {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 2px 9px;
-  font-family: "Courier New", monospace;
+  gap: 5px;
+  padding: 2px 8px;
+  font-family: var(--mono);
   font-size: 0.72rem;
   font-weight: bold;
   border: 1px solid currentColor;
@@ -166,13 +173,16 @@ function fmtRt(v: number | null | undefined): string {
   background: currentColor;
 }
 .pill.up {
-  color: #2fff66;
+  color: var(--up);
+  background: #e8fff0;
 }
 .pill.degraded {
-  color: #ffd400;
+  color: var(--degraded);
+  background: #fff8e0;
 }
 .pill.down {
-  color: #ff3344;
+  color: var(--down);
+  background: #ffecec;
 }
 .pill.down .dot {
   animation: blink 0.8s steps(2, start) infinite;
@@ -187,38 +197,44 @@ function fmtRt(v: number | null | undefined): string {
   align-items: center;
   gap: 12px;
   font-size: 0.82rem;
-  color: #cbd5f5;
+  color: var(--ink);
   flex-wrap: wrap;
 }
 .meta .muted {
-  color: #7c87b8;
+  color: var(--ink-soft);
 }
 .meta .rt {
   margin-left: auto;
-  font-family: "Courier New", monospace;
+  font-family: var(--mono);
   font-weight: bold;
-  color: #41ffc8;
+  color: var(--up);
 }
 .stats {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 6px;
-  border-top: 1px solid #2a3360;
-  padding-top: 10px;
+  border-top: 1px solid var(--rule-soft);
+  padding-top: 8px;
 }
 .stat {
   display: flex;
   flex-direction: column;
-  gap: 2px;
+  gap: 1px;
 }
 .stat-label {
-  font-family: "Courier New", monospace;
-  font-size: 0.66rem;
-  color: #7c87b8;
+  font-family: var(--mono);
+  font-size: 0.64rem;
+  color: var(--ink-soft);
 }
 .stat-val {
-  font-family: "Courier New", monospace;
+  font-family: var(--mono);
   font-weight: bold;
-  color: #eaf0ff;
+  color: var(--ink);
+}
+@media (prefers-reduced-motion: reduce) {
+  .pill.down .dot,
+  .card.flash {
+    animation: none;
+  }
 }
 </style>

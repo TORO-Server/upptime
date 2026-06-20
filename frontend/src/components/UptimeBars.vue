@@ -34,24 +34,21 @@ function label(b: DayBar): string {
   height: 28px;
   align-items: stretch;
   padding: 3px;
-  background: #050810;
-  border: 1px solid #173a33;
+  background: #f2f5ff;
+  border: 1px solid var(--rule-soft);
 }
 .bar {
   flex: 1;
   min-width: 3px;
-  background: #2a2f3a;
+  background: #d3d8e6;
 }
 .bar.up {
-  background: #2fff66;
-  box-shadow: 0 0 4px #2fff66;
+  background: #18a83e;
 }
 .bar.degraded {
-  background: #ffd400;
-  box-shadow: 0 0 4px #ffd400;
+  background: #e0a000;
 }
 .bar.down {
-  background: #ff3344;
-  box-shadow: 0 0 4px #ff3344;
+  background: #d61f30;
 }
 </style>

@@ -1,4 +1,23 @@
-/* TORO STATUS — global retro theme (Web 1.0 / GeoCities, tiled starfield). */
+/* TORO STATUS — 90年代 日本の個人ホームページ風テーマ。
+   背景は星空タイル(当時の <body background> 感)。本文は薄色の罫線テーブルに
+   黒文字でのせ、可読性を死守する。見出しだけ派手に。 */
+
+:root {
+  /* 紙面(本文パネル) */
+  --paper: #fffdf2; /* クリーム */
+  --paper-alt: #eaf0ff; /* 薄水色(メニュー等) */
+  --paper-head: #ffe9f4; /* 見出し帯のうっすらピンク */
+  --rule: #3a4a86; /* 罫線(濃紺) */
+  --rule-soft: #b9c2e6;
+  --ink: #14141a; /* 本文(黒) */
+  --ink-soft: #4a4f63;
+  --mono: "ＭＳ ゴシック", "MS Gothic", "Osaka-Mono", "Courier New", monospace;
+
+  /* 状態色(本文が薄色なので濃いめ) */
+  --up: #0a8a2f;
+  --degraded: #b07400;
+  --down: #cc1122;
+}
 
 * {
   box-sizing: border-box;
@@ -14,7 +33,7 @@ body {
   min-height: 100vh;
   color: #e6ecff;
   background-color: #02030a;
-  /* Tiled starfield — no external GIFs, so nothing 404s. */
+  /* タイル星空 — 外部GIF不要(404しない)。 */
   background-image:
     radial-gradient(1px 1px at 20px 30px, #ffffff, transparent),
     radial-gradient(1px 1px at 90px 70px, #bcd4ff, transparent),
@@ -24,31 +43,31 @@ body {
     radial-gradient(1.5px 1.5px at 190px 180px, #ffffff, transparent);
   background-size: 200px 200px;
   background-repeat: repeat;
-  font-family: "Segoe UI", "Hiragino Kaku Gothic ProN", "Hiragino Sans",
-    "MS PGothic", Meiryo, sans-serif;
-  line-height: 1.55;
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
+  /* 当時の定番和文フォント。等幅寄りのカクカク感。 */
+  font-family: "ＭＳ Ｐゴシック", "MS PGothic", "Hiragino Kaku Gothic ProN",
+    "Hiragino Sans", Meiryo, Osaka, sans-serif;
+  line-height: 1.6;
 }
 
+/* 本文中のリンクは当時の定番カラー(青→紫、hoverで赤) */
 a {
-  color: #4df0ff;
+  color: #0000ee;
   text-decoration: underline;
 }
 a:visited {
-  color: #ff8cf0;
+  color: #551a8b;
 }
 a:hover {
-  color: #fff066;
-  background: #16204a;
+  color: #cc1122;
+  background: #ffff99;
 }
 
 ::selection {
-  background: #00ffe1;
-  color: #02030a;
+  background: #ffe600;
+  color: #14141a;
 }
 
-/* Retro scrollbar (WebKit). */
+/* レトロなスクロールバー(WebKit) */
 ::-webkit-scrollbar {
   width: 14px;
   height: 14px;
@@ -57,9 +76,6 @@ a:hover {
   background: #0a0c1c;
 }
 ::-webkit-scrollbar-thumb {
-  background: #2a3360;
-  border: 2px outset #4a5590;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #3a4470;
+  background: #6a76a8;
+  border: 2px outset #aab4e0;
 }

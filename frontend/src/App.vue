@@ -3,10 +3,19 @@ import { ref, computed, onMounted, onUnmounted } from "vue";
 import SiteCard from "./components/SiteCard.vue";
 import ServerRoom from "./components/ServerRoom.vue";
 import Marquee from "./components/Marquee.vue";
-import HitCounter from "./components/HitCounter.vue";
-import RetroBadges from "./components/RetroBadges.vue";
+import RetroNav from "./components/RetroNav.vue";
+import AccessCounter from "./components/AccessCounter.vue";
+import KiribanNotice from "./components/KiribanNotice.vue";
+import KanrininDiary from "./components/KanrininDiary.vue";
+import ProfileBox from "./components/ProfileBox.vue";
+import LinksSection from "./components/LinksSection.vue";
+import LivelinessMeter from "./components/LivelinessMeter.vue";
+import RetroDivider from "./components/RetroDivider.vue";
 import UnderConstruction from "./components/UnderConstruction.vue";
+import { fmtDateJp, fmtDateTimeJp, daysBetween } from "./utils/jst.ts";
 import type { Summary, Status } from "./types.ts";
+
+const SINCE = "2024-11-01T00:00:00+09:00";
 
 const data = ref<Summary | null>(null);
 const error = ref(false);
@@ -38,6 +47,21 @@ onUnmounted(() => {
   if (flashTimer) clearTimeout(flashTimer);
 });
 
+const github = computed(
+  () => data.value?.github ?? "https://github.com/TORO-Server/upptime"
+);
+
+const navItems = computed(() => [
+  { label: "とっぷ", href: "#top" },
+  { label: "ぷろふぃーる", href: "#about" },
+  { label: "さーばのようす", href: "#server-room" },
+  { label: "さーびすいちらん", href: "#services" },
+  { label: "こうしんりれき", href: "#diary" },
+  { label: "りんく", href: "#links" },
+  { label: "けいじばん", href: `${github.value}/discussions`, external: true },
+  { label: "そーすこーど", href: github.value, external: true },
+]);
+
 const roomSites = computed(() =>
   (data.value?.sites ?? []).map((s) => ({
     slug: s.slug,
@@ -46,39 +70,31 @@ const roomSites = computed(() =>
   }))
 );
 
-const counts = computed(() => {
-  const sites = data.value?.sites ?? [];
-  return {
-    total: sites.length,
-    up: sites.filter((s) => s.status === "up").length,
-    degraded: sites.filter((s) => s.status === "degraded").length,
-    down: sites.filter((s) => s.status === "down").length,
-  };
-});
-
 const overall = computed<{ key: Status; text: string }>(() => {
   const sites = data.value?.sites ?? [];
   if (sites.length === 0) return { key: "up", text: "—" };
   const down = sites.filter((s) => s.status === "down").length;
   const degraded = sites.filter((s) => s.status === "degraded").length;
-  if (down === sites.length) return { key: "down", text: "全システム停止中" };
-  if (down > 0) return { key: "down", text: "一部のシステムで障害が発生しています" };
-  if (degraded > 0)
-    return { key: "degraded", text: "一部でパフォーマンスが低下しています" };
-  return { key: "up", text: "すべてのシステムは正常に稼働中" };
+  if (down === sites.length) return { key: "down", text: "ぜんぶ おやすみ中です…(T_T)" };
+  if (down > 0) return { key: "down", text: "いちぶ ダウンしています ごめんなさい m(_ _)m" };
+  if (degraded > 0) return { key: "degraded", text: "いちぶ ちょっと不調かも (´・ω・`)" };
+  return { key: "up", text: "ぜんぶ げんきに かどう中です！(^o^)/" };
 });
 
-const updatedAt = computed(() => {
-  if (!data.value?.generatedAt) return "";
-  const d = new Date(data.value.generatedAt);
-  return d.toLocaleString("ja-JP", {
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
-  });
-});
+const updatedAt = computed(() =>
+  data.value?.generatedAt ? fmtDateTimeJp(data.value.generatedAt) : ""
+);
+const updatedDate = computed(() =>
+  data.value?.generatedAt ? fmtDateJp(data.value.generatedAt) : ""
+);
+const openDays = computed(() =>
+  daysBetween(SINCE, data.value?.generatedAt ?? new Date())
+);
+const thisYear = computed(() =>
+  data.value?.generatedAt
+    ? new Date(data.value.generatedAt).getFullYear()
+    : new Date().getFullYear()
+);
 
 function onSelect(slug: string): void {
   selectedSlug.value = slug;
@@ -91,187 +107,257 @@ function onSelect(slug: string): void {
 
 <template>
   <div class="page">
-    <header class="header">
-      <h1 class="rainbow glow">{{ data?.name || "TORO STATUS" }}</h1>
-      <p class="tagline blink">★ ＴＯＲＯ サーバー 監視 ステーション ★</p>
-      <p v-if="data?.intro?.message" class="intro">{{ data.intro.message }}</p>
-    </header>
+    <div class="frame">
+      <!-- ===== 見出し / テキストサイト風口上 ===== -->
+      <header id="top" class="masthead">
+        <h1 class="rainbow glow">{{ data?.name || "TORO STATUS" }}</h1>
+        <p class="kojo">
+          ようこそ！TORO サーバー　かどうじょうきょうの　コーナーへ！！<br />
+          ここは 管理人が <span class="big">毎　日　せっせと</span><br />
+          サーバーの 生死を 見守る　<span class="pink">ヒミツの 観測所</span>　なのれす。<br />
+          <span class="soft">…まあ、たいてい　元気なんですけどね (´ー｀)</span>
+        </p>
+        <p class="since">
+          Since 2024.11.01 ／ 開設 <b>{{ openDays }}</b> 日目
+          <template v-if="updatedDate"> ／ さいしゅうこうしん {{ updatedDate }}</template>
+        </p>
+      </header>
 
-    <Marquee
-      text="★彡 WELCOME TO TORO STATUS // この電子掲示板はTOROサーバーの稼働状況を24時間監視しています // SIGNED, SEALED, DELIVERED // 全てのノードをリアルタイム描画中 彡★"
-    />
+      <Marquee
+        text="★彡 いらっしゃいませ〜 当サイトは TORO サーバーの かどうじょうきょうを 24時間 みまもる こじんサイトです ／／ キリ番ふんだら けいじばんへ ほうこくしてね ／／ ゆっくりしていってね (^o^)丿 彡★"
+      />
 
-    <!-- three.js datacenter, framed like a 90s desktop window -->
-    <section class="win">
-      <div class="win__bar">
-        <span class="win__title">▣ TORO_DATACENTER.EXE</span>
-        <span class="win__btns"><i>_</i><i>▢</i><i>✕</i></span>
+      <div v-if="loading" class="state">▓▒░ NOW LOADING … よみこみ中 ░▒▓</div>
+      <div v-else-if="error" class="state error">
+        ⚠ ステータスデータの よみこみに しっぱいしました。<br />
+        しばらくしてから もういちど おためしください m(_ _)m
       </div>
-      <div class="win__body">
-        <ServerRoom :sites="roomSites" @select="onSelect" />
-        <div class="sysline">
-          SYSTEM:<b :class="overall.key">{{ overall.key.toUpperCase() }}</b>
-          | NODES:<b>{{ counts.total }}</b>
-          | UP:<b class="up">{{ counts.up }}</b>
-          | WARN:<b class="degraded">{{ counts.degraded }}</b>
-          | DOWN:<b class="down">{{ counts.down }}</b>
-        </div>
-      </div>
-    </section>
 
-    <div v-if="loading" class="state">▓▒░ NOW LOADING ░▒▓</div>
-    <div v-else-if="error" class="state error">
-      ⚠ ステータスデータの取得に失敗しました。しばらくしてから再度お試しください。
+      <div v-else class="cols">
+        <!-- ===== 左メニュー ===== -->
+        <aside class="col-nav">
+          <RetroNav :items="navItems" :last-update="updatedDate" />
+          <div class="panel">
+            <AccessCounter />
+          </div>
+        </aside>
+
+        <!-- ===== 本文 ===== -->
+        <main class="col-body">
+          <div class="panel">
+            <KiribanNotice :github="github" />
+          </div>
+
+          <RetroDivider variant="star" />
+
+          <!-- ぷろふぃーる -->
+          <section id="about" class="sec">
+            <h2 class="jp-head">■ ぷろふぃーる（かんりにん しょうかい）</h2>
+            <div class="panel"><ProfileBox :github="github" /></div>
+          </section>
+
+          <RetroDivider variant="wave" />
+
+          <!-- うちのさーば(3D) -->
+          <section id="server-room" class="sec wafu">
+            <h2 class="wafu__bar">【 うちの さーば（自慢） 】</h2>
+            <div class="wafu__screen">
+              <ServerRoom :sites="roomSites" @select="onSelect" />
+            </div>
+            <p class="wafu__legend">
+              これが TORO のサーバ計算機です！マウスで ぐりぐり 動かせるよ (^^)<br />
+              <b class="led-g">●みどり＝げんき</b>
+              ／ <b class="led-y">●きいろ＝ちょっと不調</b>
+              ／ <b class="led-r">●あか＝おやすみ中</b>
+            </p>
+            <div class="panel">
+              <LivelinessMeter
+                :sites="data?.sites ?? []"
+                :generated-at="data?.generatedAt ?? null"
+              />
+            </div>
+          </section>
+
+          <RetroDivider variant="double" />
+
+          <!-- さーびす いちらん -->
+          <section id="services" class="sec">
+            <h2 class="jp-head">■ さーびす いちらん（ただいまの ようす）</h2>
+            <div class="banner" :class="overall.key">
+              <span class="banner-dot" />{{ overall.text }}
+            </div>
+            <div class="grid">
+              <SiteCard
+                v-for="s in data?.sites"
+                :key="s.slug"
+                :site="s"
+                :flash="s.slug === selectedSlug"
+              />
+            </div>
+          </section>
+
+          <RetroDivider variant="star" />
+
+          <!-- こうしんりれき / にっき -->
+          <section id="diary" class="sec">
+            <h2 class="jp-head">■ こうしんりれき ／ かんりにんの にっき</h2>
+            <div class="panel">
+              <KanrininDiary
+                :sites="data?.sites ?? []"
+                :generated-at="data?.generatedAt ?? null"
+              />
+            </div>
+          </section>
+
+          <RetroDivider variant="flower" />
+
+          <!-- りんく -->
+          <section id="links" class="sec">
+            <h2 class="jp-head">■ りんく ／ 相互リンク募集中</h2>
+            <div class="panel"><LinksSection :github="github" /></div>
+          </section>
+
+          <UnderConstruction
+            label="このコーナーは ただいま製作中です。完成までしばらくお待ちくださいませ m(_ _)m"
+          />
+        </main>
+      </div>
+
+      <!-- ===== 和フッター ===== -->
+      <footer class="foot">
+        <div class="foot__rule">──────────────────────────</div>
+        <p>
+          このサイトは <b>とろ</b> が こじんてきに 運営しています。<br />
+          Netscape Navigator 4.0 ／ Internet Explorer 4.0 以上 推奨 ・
+          がめんかいぞうど 800×600 でごらんください。
+        </p>
+        <p class="foot__sub">
+          ♪ BGM：なし（このサイトは おとが でません。むかしは MIDI ながれてたのにね (^^;）<br />
+          <span v-if="updatedAt">さいしゅうチェック {{ updatedAt }} ・</span>
+          リンクフリー ・ Copyright(C) 1999-{{ thisYear }} TORO SERVER
+        </p>
+        <p class="foot__tech">
+          — powered by TypeScript + Vue.js + three.js + GitHub Actions —
+        </p>
+        <div class="foot__rule">──────────────────────────</div>
+      </footer>
     </div>
-
-    <template v-else>
-      <div class="banner" :class="overall.key">
-        <span class="banner-dot" />{{ overall.text }}
-      </div>
-
-      <main class="grid">
-        <SiteCard
-          v-for="s in data?.sites"
-          :key="s.slug"
-          :site="s"
-          :flash="s.slug === selectedSlug"
-        />
-      </main>
-    </template>
-
-    <UnderConstruction />
-
-    <footer class="footer">
-      <HitCounter />
-      <RetroBadges />
-      <hr class="rule" />
-      <p class="foot-line">
-        <span v-if="updatedAt">最終更新: {{ updatedAt }}</span>
-        <span class="sep">·</span>
-        <span>TypeScript + Vue.js + three.js + GitHub Actions</span>
-      </p>
-      <p class="foot-line muted">
-        Best viewed at 800x600 in Netscape Navigator 4.0 ·
-        <a v-if="data?.github" :href="data.github" target="_blank" rel="noopener"
-          >[ GitHub ]</a
-        >
-        · © 2026 TORO SERVER
-      </p>
-    </footer>
   </div>
 </template>
 
 <style scoped>
 .page {
-  max-width: 940px;
+  max-width: 980px;
   margin: 0 auto;
-  padding: 24px 14px 60px;
+  padding: 16px 10px 44px;
 }
-.header {
+.frame {
+  background: var(--paper);
+  border: 3px double var(--rule);
+  box-shadow: 0 0 0 1px #fff, 0 6px 30px rgba(0, 0, 0, 0.5);
+  padding: 12px 14px 18px;
+}
+
+/* ---- masthead ---- */
+.masthead {
   text-align: center;
-  margin-bottom: 14px;
+  padding: 8px 4px 12px;
+  border-bottom: 1px dashed var(--rule-soft);
+  scroll-margin-top: 12px;
 }
-.header h1 {
-  margin: 0;
-  font-size: clamp(2rem, 7vw, 3.4rem);
+.masthead h1 {
+  margin: 0 0 8px;
+  font-size: clamp(2rem, 7vw, 3.2rem);
   font-weight: 900;
   letter-spacing: 0.04em;
 }
-.tagline {
-  margin: 6px 0 2px;
-  font-family: "Courier New", monospace;
-  color: #00ffe1;
+.kojo {
+  margin: 0 0 8px;
+  color: var(--ink);
+  font-size: 0.96rem;
+  line-height: 1.9;
+}
+.kojo .big {
+  font-size: 1.25em;
+  font-weight: bold;
+  color: #1d4ed8;
+}
+.kojo .pink {
+  color: #c01a5b;
   font-weight: bold;
 }
-.intro {
-  margin: 4px 0 0;
-  color: #aeb8e8;
-  font-size: 0.9rem;
+.kojo .soft {
+  color: var(--ink-soft);
+  font-size: 0.88em;
+}
+.since {
+  margin: 0;
+  font-family: var(--mono);
+  font-size: 0.76rem;
+  color: var(--ink-soft);
+}
+.since b {
+  color: #c01a5b;
 }
 
-/* desktop-window chrome around the 3D canvas */
-.win {
-  border: 3px outset #c0c0c0;
-  background: #c0c0c0;
-  margin: 14px 0;
-  box-shadow: 0 0 24px rgba(0, 255, 225, 0.18);
+/* ---- columns ---- */
+.cols {
+  display: grid;
+  grid-template-columns: 184px 1fr;
+  gap: 14px;
+  padding-top: 12px;
 }
-.win__bar {
+.col-nav {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 3px 5px;
-  background: linear-gradient(90deg, #00006b, #1d6fe0);
-  color: #fff;
-  font-family: "Courier New", monospace;
-  font-weight: bold;
-  font-size: 0.82rem;
+  flex-direction: column;
+  gap: 12px;
+  align-self: start;
+  position: sticky;
+  top: 8px;
 }
-.win__btns {
-  display: inline-flex;
-  gap: 3px;
+.col-body {
+  min-width: 0;
 }
-.win__btns i {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: 16px;
-  height: 14px;
-  background: #c0c0c0;
-  color: #000;
-  border: 1px outset #fff;
-  font-style: normal;
-  font-size: 0.66rem;
-}
-.win__body {
-  border: 2px inset #fff;
-  background: #02030a;
-}
-.sysline {
-  font-family: "Courier New", monospace;
-  font-size: 0.74rem;
-  color: #9fe6ff;
-  padding: 5px 8px;
-  border-top: 1px solid #173a33;
-  background: #050810;
-  text-align: center;
-}
-.sysline b {
-  margin: 0 2px 0 3px;
-}
-.sysline .up,
-b.up {
-  color: #2fff66;
-}
-.sysline .degraded,
-b.degraded {
-  color: #ffd400;
-}
-.sysline .down,
-b.down {
-  color: #ff3344;
+@media (max-width: 720px) {
+  .cols {
+    grid-template-columns: 1fr;
+  }
+  .col-nav {
+    position: static;
+  }
 }
 
-.state {
-  text-align: center;
-  padding: 50px 20px;
-  font-family: "Courier New", monospace;
-  color: #41ffc8;
+/* ---- generic panel + heading ---- */
+.panel {
+  background: var(--paper);
+  border: 1px solid var(--rule-soft);
+  padding: 10px 12px;
 }
-.state.error {
-  color: #ff3344;
+.sec {
+  scroll-margin-top: 12px;
+  margin: 2px 0;
+}
+.jp-head {
+  margin: 6px 0 8px;
+  padding: 4px 10px;
+  font-size: 1.02rem;
+  color: var(--rule);
+  background: var(--paper-head);
+  border-left: 6px solid #c01a5b;
+  border-bottom: 1px solid var(--rule-soft);
 }
 
+/* ---- status banner ---- */
 .banner {
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 10px;
-  padding: 12px 18px;
+  padding: 8px 14px;
   font-weight: bold;
-  margin: 14px 0;
-  border: 3px ridge;
-  font-family: "Courier New", monospace;
+  margin: 0 0 12px;
+  border: 2px ridge;
+  font-family: "ＭＳ Ｐゴシック", "MS PGothic", sans-serif;
 }
 .banner-dot {
   width: 12px;
@@ -280,76 +366,106 @@ b.down {
   background: currentColor;
 }
 .banner.up {
-  color: #2fff66;
-  background: #07210f;
-  border-color: #2fff66;
+  color: var(--up);
+  background: #eafff1;
+  border-color: var(--up);
 }
 .banner.degraded {
-  color: #ffd400;
-  background: #2a2406;
-  border-color: #ffd400;
+  color: var(--degraded);
+  background: #fff7e0;
+  border-color: var(--degraded);
 }
 .banner.down {
-  color: #ff3344;
-  background: #2a0a0e;
-  border-color: #ff3344;
-  animation: banner-alarm 1s steps(2, start) infinite;
+  color: var(--down);
+  background: #ffecec;
+  border-color: var(--down);
+  animation: alarm 1s steps(2, start) infinite;
 }
-@keyframes banner-alarm {
+@keyframes alarm {
   50% {
-    background: #4a0a12;
+    background: #ffd6d6;
   }
 }
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
-  gap: 14px;
+  grid-template-columns: repeat(auto-fill, minmax(330px, 1fr));
+  gap: 12px;
 }
-@media (max-width: 480px) {
+@media (max-width: 460px) {
   .grid {
     grid-template-columns: 1fr;
   }
 }
 
-.footer {
-  margin-top: 26px;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-}
-.rule {
-  width: 100%;
-  border: 0;
-  border-top: 2px groove #3a4470;
-}
-.foot-line {
+/* ---- 3D の和枠 ---- */
+.wafu__bar {
   margin: 0;
-  font-family: "Courier New", monospace;
-  font-size: 0.78rem;
-  color: #aeb8e8;
+  padding: 5px 10px;
+  font-size: 1.02rem;
+  color: #fff;
+  background: linear-gradient(90deg, #1a2a6b, #3a4a86);
+  border: 1px solid var(--rule);
+  text-align: center;
+  letter-spacing: 0.06em;
 }
-.foot-line.muted {
-  color: #6b76a8;
+.wafu__screen {
+  border: 2px inset #cfd6f0;
+  background: #02030a;
 }
-.foot-line .sep {
-  margin: 0 7px;
-  opacity: 0.5;
+.wafu__legend {
+  margin: 6px 0 10px;
+  font-size: 0.86rem;
+  color: var(--ink);
+  text-align: center;
+}
+.led-g {
+  color: var(--up);
+}
+.led-y {
+  color: var(--degraded);
+}
+.led-r {
+  color: var(--down);
 }
 
-/* shared retro text effects */
+/* ---- footer ---- */
+.foot {
+  margin-top: 16px;
+  text-align: center;
+  color: var(--ink);
+  font-size: 0.82rem;
+}
+.foot__rule {
+  color: var(--rule-soft);
+  font-family: var(--mono);
+  overflow: hidden;
+  white-space: nowrap;
+}
+.foot p {
+  margin: 8px 0;
+}
+.foot__sub {
+  color: var(--ink-soft);
+  font-size: 0.76rem;
+}
+.foot__tech {
+  font-family: var(--mono);
+  color: var(--ink-soft);
+  font-size: 0.74rem;
+}
+
+/* ---- retro text effects ---- */
 .rainbow {
   background: linear-gradient(
     90deg,
     #ff0040,
     #ff8c00,
-    #ffe600,
-    #00ff66,
-    #00e1ff,
-    #6a5cff,
-    #ff00d4,
+    #ffd000,
+    #00b050,
+    #0080ff,
+    #6a3cff,
+    #ff00aa,
     #ff0040
   );
   background-size: 200% auto;
@@ -365,19 +481,19 @@ b.down {
   }
 }
 .glow {
-  filter: drop-shadow(0 0 10px rgba(0, 225, 255, 0.45));
+  filter: drop-shadow(1px 1px 0 rgba(0, 0, 0, 0.25));
 }
-.blink {
-  animation: text-blink 1.4s steps(2, start) infinite;
+.state {
+  text-align: center;
+  padding: 40px 16px;
+  font-family: var(--mono);
+  color: var(--rule);
 }
-@keyframes text-blink {
-  50% {
-    opacity: 0.25;
-  }
+.state.error {
+  color: var(--down);
 }
 @media (prefers-reduced-motion: reduce) {
   .rainbow,
-  .blink,
   .banner.down {
     animation: none;
   }

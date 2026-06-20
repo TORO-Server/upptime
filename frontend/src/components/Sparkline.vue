@@ -63,25 +63,24 @@ const segments = computed<string[] | null>(() => {
   width: 100%;
   height: 44px;
   display: block;
-  background: #050810;
-  border: 1px solid #173a33;
+  background: #f2f5ff;
+  border: 1px solid var(--rule-soft);
 }
 .spark polyline {
-  stroke: #39ff14;
+  stroke: #0033cc;
   stroke-width: 1.5;
   stroke-linejoin: round;
   stroke-linecap: round;
-  filter: drop-shadow(0 0 2px #39ff14);
 }
 .spark-empty {
   height: 44px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: "Courier New", monospace;
+  font-family: var(--mono);
   font-size: 0.78rem;
-  color: #41ffc8;
-  background: #050810;
-  border: 1px solid #173a33;
+  color: var(--ink-soft);
+  background: #f2f5ff;
+  border: 1px solid var(--rule-soft);
 }
 </style>
