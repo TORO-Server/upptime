@@ -85,6 +85,7 @@ const STATUS_REQUEST = Buffer.concat([writeVarInt(1), Buffer.from([0x00])]);
 interface ParsedStatus {
   players: Players | null;
   version: string | null;
+  favicon: string | null;
 }
 
 function parseStatusResponse(buf: Buffer): ParsedStatus | null {
@@ -109,15 +110,17 @@ function parseStatusResponse(buf: Buffer): ParsedStatus | null {
     const json = JSON.parse(jsonBytes.toString("utf8")) as {
       players?: { online?: number; max?: number };
       version?: { name?: string };
+      favicon?: string;
     };
     return {
       players: json.players
         ? { online: json.players.online ?? null, max: json.players.max ?? null }
         : null,
       version: json.version?.name ?? null,
+      favicon: json.favicon ?? null,
     };
   } catch {
-    return { players: null, version: null }; // responded, but odd payload — still up
+    return { players: null, version: null, favicon: null }; // responded, but odd payload — still up
   }
 }
 
@@ -157,6 +160,7 @@ function minecraftPing(
             responseTime: Math.round(performance.now() - start),
             players: parsed.players,
             version: parsed.version,
+            favicon: parsed.favicon,
           });
         }
       } catch (e) {
@@ -325,7 +329,7 @@ async function checkSite(
     slug: site.slug,
     name: site.name,
     type: site.type,
-    icon: site.icon ?? null,
+    icon: check.favicon ?? site.icon ?? null,
     target,
     url: site.url ?? null,
     status,

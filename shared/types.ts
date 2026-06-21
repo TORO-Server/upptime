@@ -126,6 +126,7 @@ export interface CheckResult {
   responseTime: number | null;
   players?: Players | null;
   version?: string | null;
+  favicon?: string | null;
   code?: number;
   error?: string;
 }
