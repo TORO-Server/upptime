@@ -1,8 +1,5 @@
 <script setup lang="ts">
-import { ref, computed } from "vue";
-import Sparkline from "./Sparkline.vue";
-import UptimeBars from "./UptimeBars.vue";
-import type { SiteSummary } from "../types.ts";
+import type { SiteSummary } from "~/types";
 
 const props = defineProps<{ site: SiteSummary; flash?: boolean }>();
 

@@ -1,21 +1,24 @@
 <script setup lang="ts">
 // 稼働サマリー（現在時刻・監視件数・稼働中・平均応答）。中立・敬体。
-import { ref, computed, onMounted, onUnmounted } from "vue";
-import { fmtClockJp, fmtDateTimeJp } from "../utils/jst.ts";
-import type { SiteSummary } from "../types.ts";
+// 時計は ClientOnly で包む — サーバー側では最終チェック時刻を表示し、
+// JS有効時のみリアルタイム時計に切り替わる（ハイドレーション不一致を防ぐ）。
+import type { SiteSummary } from "~/types";
 
 const props = defineProps<{ sites: SiteSummary[]; generatedAt: string | null }>();
 
-const now = ref<number>(Date.now());
+const now = ref<Date | null>(null);
 let timer: ReturnType<typeof setInterval> | null = null;
 onMounted(() => {
-  timer = setInterval(() => (now.value = Date.now()), 1000);
+  now.value = new Date();
+  timer = setInterval(() => {
+    now.value = new Date();
+  }, 1000);
 });
 onUnmounted(() => {
   if (timer) clearInterval(timer);
 });
 
-const clock = computed(() => fmtClockJp(now.value));
+const clock = computed(() => (now.value ? fmtClockJp(now.value) : ""));
 const total = computed(() => (props.sites ?? []).length);
 const upCount = computed(
   () => (props.sites ?? []).filter((s) => s.status === "up").length
@@ -31,7 +34,9 @@ const avgRt = computed(() => {
 
 <template>
   <div class="bar">
-    <div class="bar__clock">現在時刻：{{ clock }}</div>
+    <ClientOnly>
+      <div class="bar__clock">現在時刻：{{ clock }}</div>
+    </ClientOnly>
     <div class="bar__stats">
       監視対象：<b>{{ total }}</b> 件 ／ 稼働中：<b class="up">{{ upCount }}</b> 件 ／
       平均応答時間：<b>{{ avgRt ?? "—" }}</b> ms

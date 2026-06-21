@@ -1,9 +1,7 @@
 <script setup lang="ts">
 // 稼働状況レポート。summary.json の状態から、その時点の稼働状況を
 // 敬体で自動生成する（管理人ペルソナや脚色は用いない）。
-import { computed } from "vue";
-import { fmtDateJp } from "../utils/jst.ts";
-import type { SiteSummary } from "../types.ts";
+import type { SiteSummary } from "~/types";
 
 const props = defineProps<{ sites: SiteSummary[]; generatedAt: string | null }>();
 

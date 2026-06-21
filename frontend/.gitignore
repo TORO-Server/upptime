@@ -1,4 +1,6 @@
 node_modules
 dist
+.output
+.nuxt
 *.local
 .DS_Store
