@@ -1,4 +1,4 @@
-<script setup lang="ts">
+﻿<script setup lang="ts">
 // 関連リンク。企業公式として中立・敬体。相互リンク募集やバナー配布は行わない。
 const props = defineProps<{ github?: string | null }>();
 const repo = computed(
@@ -10,11 +10,6 @@ const links = computed(() => [
     label: "ソースコード（GitHub）",
     href: repo.value,
     note: "本サイトのソースコードを公開しています。",
-  },
-  {
-    label: "お問い合わせ（GitHub Discussions）",
-    href: `${repo.value}/discussions`,
-    note: "ご質問・不具合のご報告はこちらへお願いいたします。",
   },
   {
     label: "TORO サーバー 公式サイト",

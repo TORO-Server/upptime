@@ -1,4 +1,4 @@
-<script setup lang="ts">
+﻿<script setup lang="ts">
 import type { Summary, Status } from "~/types";
 
 // ビルド時: サーバーAPIが public/data/summary.json を読み込んでHTMLに埋め込む
@@ -36,9 +36,7 @@ const navItems = computed(() => [
   { label: "現在の稼働状況", href: "#status" },
   { label: "このサイトについて", href: "#about" },
   { label: "サービス一覧", href: "#services" },
-  { label: "稼働レポート", href: "#report" },
   { label: "関連リンク", href: "#links" },
-  { label: "お問い合わせ", href: `${github.value}/discussions`, external: true },
   { label: "ソースコード", href: github.value, external: true },
 ]);
 
@@ -127,7 +125,7 @@ useHead({
           <!-- このサイトについて -->
           <section id="about" class="sec">
             <h2 class="jp-head">■ このサイトについて</h2>
-            <div class="panel"><AboutBox :github="github" /></div>
+            <div class="panel"><AboutBox /></div>
           </section>
 
           <RetroDivider variant="double" />
@@ -140,21 +138,7 @@ useHead({
             </div>
           </section>
 
-          <RetroDivider variant="star" />
-
-          <!-- 稼働レポート -->
-          <section id="report" class="sec">
-            <h2 class="jp-head">■ 稼働レポート</h2>
-            <div class="panel">
-              <StatusReport
-                :sites="data?.sites ?? []"
-                :generated-at="data?.generatedAt ?? null"
-              />
-            </div>
-          </section>
-
           <RetroDivider variant="wave" />
-
           <!-- 関連リンク -->
           <section id="links" class="sec">
             <h2 class="jp-head">■ 関連リンク</h2>
