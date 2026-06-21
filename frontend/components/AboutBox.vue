@@ -1,7 +1,5 @@
 <script setup lang="ts">
 // このサイトについて（運営者情報・監視方式）。企業公式として中立・敬体。
-import { computed } from "vue";
-
 const props = defineProps<{ github?: string | null }>();
 const discussions = computed(() =>
   props.github

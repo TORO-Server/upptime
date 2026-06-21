@@ -1,38 +1,27 @@
 <script setup lang="ts">
-import { ref, computed, onMounted, onUnmounted } from "vue";
-import SiteCard from "./components/SiteCard.vue";
-import Marquee from "./components/Marquee.vue";
-import RetroNav from "./components/RetroNav.vue";
-import RetroDivider from "./components/RetroDivider.vue";
-import AboutBox from "./components/AboutBox.vue";
-import StatusBar from "./components/StatusBar.vue";
-import StatusReport from "./components/StatusReport.vue";
-import LinksSection from "./components/LinksSection.vue";
-import { fmtDateJp, fmtDateTimeJp } from "./utils/jst.ts";
-import type { Summary, Status } from "./types.ts";
+import type { Summary, Status } from "~/types";
 
-const data = ref<Summary | null>(null);
-const error = ref(false);
-const loading = ref(true);
-let timer: ReturnType<typeof setInterval> | null = null;
+// ビルド時: サーバーAPIが public/data/summary.json を読み込んでHTMLに埋め込む
+// JS有効時: 60秒ごとに静的ファイルを直接フェッチして更新
+const { data, pending, error: fetchError } = useAsyncData<Summary>(
+  "summary",
+  () => $fetch("/api/summary")
+);
 
-async function load(): Promise<void> {
+async function clientRefresh(): Promise<void> {
   try {
-    const url = `${import.meta.env.BASE_URL}data/summary.json?_=${Date.now()}`;
-    const res = await fetch(url, { cache: "no-store" });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-    data.value = (await res.json()) as Summary;
-    error.value = false;
+    const res = await $fetch<Summary>(`/data/summary.json?_=${Date.now()}`, {
+      cache: "no-store",
+    });
+    data.value = res;
   } catch {
-    error.value = true;
-  } finally {
-    loading.value = false;
+    // エラー時は既存データを維持
   }
 }
 
+let timer: ReturnType<typeof setInterval> | null = null;
 onMounted(() => {
-  void load();
-  timer = setInterval(() => void load(), 60000);
+  timer = setInterval(() => void clientRefresh(), 60000);
 });
 onUnmounted(() => {
   if (timer) clearInterval(timer);
@@ -78,6 +67,14 @@ const thisYear = computed(() =>
     ? new Date(data.value.generatedAt).getFullYear()
     : new Date().getFullYear()
 );
+
+useHead({
+  title: computed(() =>
+    data.value?.name
+      ? `${data.value.name} // 稼働状況モニター`
+      : "TORO STATUS // 稼働状況モニター"
+  ),
+});
 </script>
 
 <template>
@@ -97,8 +94,8 @@ const thisYear = computed(() =>
         text="TORO サーバー 稼働状況モニター ／ 各サービスの稼働状況を24時間自動で監視しています ／ 障害・メンテナンス情報は本ページにてお知らせいたします"
       />
 
-      <div v-if="loading" class="state">読み込み中です…</div>
-      <div v-else-if="error" class="state error">
+      <div v-if="pending" class="state">読み込み中です…</div>
+      <div v-else-if="fetchError" class="state error">
         ステータスデータの読み込みに失敗しました。<br />
         しばらく経ってから再度お試しください。
       </div>
@@ -172,7 +169,7 @@ const thisYear = computed(() =>
         <p>本ページは TORO サーバー運営チームが提供する公式ステータスページです。</p>
         <p class="foot__sub">
           Since 2024<span v-if="updatedAt"> ／ 最終更新 {{ updatedAt }}</span><br />
-          Powered by TypeScript · Vue.js · GitHub Actions
+          Powered by TypeScript · Nuxt.js · GitHub Actions
         </p>
         <p class="foot__tech">© {{ thisYear }} TORO Server. All rights reserved.</p>
         <div class="foot__rule">──────────────────────────</div>

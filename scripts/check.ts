@@ -284,10 +284,14 @@ async function checkSite(
 ): Promise<SiteSummary> {
   const { timeoutMs, degradedMs, nowSec, cutoff } = opts;
 
-  const check: CheckResult =
+  // ネットワークチェックと履歴ファイル読み込みを並列実行して待ち時間を削減。
+  const historyFile = path.join(HISTORY_DIR, `${site.slug}.json`);
+  const [check, prev] = await Promise.all([
     site.type === "minecraft"
-      ? await minecraftPing(site.host ?? "", site.port ?? 0, timeoutMs)
-      : await httpCheck(site.url ?? "", timeoutMs);
+      ? minecraftPing(site.host ?? "", site.port ?? 0, timeoutMs)
+      : httpCheck(site.url ?? "", timeoutMs),
+    readJson<SiteHistory>(historyFile, { slug: site.slug, points: [] }),
+  ]);
 
   let status: Status = "down";
   if (check.up) {
@@ -305,13 +309,6 @@ async function checkSite(
   if (site.type === "minecraft" && check.players) {
     point.p = check.players.online;
   }
-
-  // Load + update rolling history for this site.
-  const historyFile = path.join(HISTORY_DIR, `${site.slug}.json`);
-  const prev = await readJson<SiteHistory>(historyFile, {
-    slug: site.slug,
-    points: [],
-  });
   const points = (prev.points || []).filter((p) => p.t >= cutoff);
   points.push(point);
 

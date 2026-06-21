@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { DayBar } from "../types.ts";
+import type { DayBar } from "~/types";
 
 withDefaults(defineProps<{ bars: DayBar[] }>(), { bars: () => [] });
 
