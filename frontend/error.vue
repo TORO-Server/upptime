@@ -38,10 +38,6 @@ function handleError() {
             {{ errInfo.message2 }}
           </p>
 
-          <div class="err-ascii">
-            <pre>{{ errInfo.ascii }}</pre>
-          </div>
-
           <button class="btn-home" @click="handleError">
             {{ t.error.home }}
           </button>
@@ -112,21 +108,6 @@ function handleError() {
   color: var(--ink-soft);
   line-height: 1.8;
   margin: 0 0 20px;
-}
-.err-ascii {
-  background: var(--paper-alt);
-  border: 1px solid var(--rule-soft);
-  padding: 10px 14px;
-  margin: 0 0 24px;
-  text-align: left;
-  overflow-x: auto;
-}
-.err-ascii pre {
-  margin: 0;
-  font-family: var(--mono);
-  font-size: 0.8rem;
-  color: var(--rule);
-  white-space: pre;
 }
 .btn-home {
   display: inline-block;
