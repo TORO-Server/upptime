@@ -10,7 +10,7 @@ defineProps<{ items: NavItem[]; lastUpdate?: string }>();
 
 <template>
   <nav class="nav">
-    <div class="nav__title">■ メニュー</div>
+    <div class="nav__title">{{ t.nav.title }}</div>
     <ul class="nav__list">
       <li v-for="(it, i) in items" :key="i">
         ・<a
@@ -23,12 +23,12 @@ defineProps<{ items: NavItem[]; lastUpdate?: string }>();
     </ul>
     <div class="nav__rule">─────────</div>
     <div v-if="lastUpdate" class="nav__upd">
-      最終更新<br />{{ lastUpdate }}
+      {{ t.nav.lastUpdate }}<br />{{ lastUpdate }}
     </div>
     <div class="nav__rule">─────────</div>
     <div class="nav__live">
-      <span class="live-dot">●</span> 監視稼働中<br />
-      （24時間 自動）
+      <span class="live-dot">●</span> {{ t.nav.live }}<br />
+      {{ t.nav.liveNote }}
     </div>
   </nav>
 </template>

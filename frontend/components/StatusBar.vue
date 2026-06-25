@@ -35,14 +35,15 @@ const avgRt = computed(() => {
 <template>
   <div class="bar">
     <ClientOnly>
-      <div class="bar__clock">現在時刻：{{ clock }}</div>
+      <div class="bar__clock">{{ t.bar.clock }}{{ clock }}</div>
     </ClientOnly>
     <div class="bar__stats">
-      監視対象：<b>{{ total }}</b> 件 ／ 稼働中：<b class="up">{{ upCount }}</b> 件 ／
-      平均応答時間：<b>{{ avgRt ?? "—" }}</b> ms
+      {{ t.bar.total }}<b>{{ total }}</b> {{ t.bar.totalUnit }} ／
+      {{ t.bar.up }}<b class="up">{{ upCount }}</b> {{ t.bar.upUnit }} ／
+      {{ t.bar.avgRt }}<b>{{ avgRt ?? "—" }}</b> {{ t.bar.rtUnit }}
     </div>
     <div v-if="generatedAt" class="bar__upd">
-      最終チェック：{{ fmtDateTimeJp(generatedAt) }}
+      {{ t.bar.lastCheck }}{{ fmtDateTimeJp(generatedAt) }}
     </div>
   </div>
 </template>

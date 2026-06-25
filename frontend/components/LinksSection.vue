@@ -6,16 +6,8 @@ const repo = computed(
 );
 
 const links = computed(() => [
-  {
-    label: "ソースコード（GitHub）",
-    href: repo.value,
-    note: "本サイトのソースコードを公開しています。",
-  },
-  {
-    label: "TORO サーバー 公式サイト",
-    href: "https://torosaba.net/",
-    note: "各サービスの本体サイトです。",
-  },
+  { label: t.links.github.label, href: repo.value, note: t.links.github.note },
+  { label: t.links.official.label, href: t.links.official.href, note: t.links.official.note },
 ]);
 </script>
 
