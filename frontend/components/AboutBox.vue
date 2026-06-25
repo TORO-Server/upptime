@@ -1,23 +1,13 @@
 ﻿<script setup lang="ts">
 // このサイトについて（運営者情報・監視方式）。企業公式として中立・敬体。
-const rows: { k: string; v: string }[] = [
-  { k: "目的", v: "TORO サーバーで提供する各サービスの稼働状況の公開" },
-  { k: "監視間隔", v: "10分間隔での自動チェック（GitHub Actions）" },
-  {
-    k: "監視方式",
-    v: "Minecraft Server List Ping ／ HTTP ヘルスチェック",
-  },
-];
 </script>
 
 <template>
   <div class="about">
-    <p class="about__lead">
-      本ページは、TORO サーバーで提供する各サービスの稼働状況をリアルタイムに監視・公開する公式ステータスページです。障害や遅延が発生した場合は、本ページに反映されます。
-    </p>
+    <p class="about__lead">{{ t.about.lead }}</p>
     <table class="about__table">
       <tbody>
-        <tr v-for="(r, i) in rows" :key="i">
+        <tr v-for="(r, i) in t.about.rows" :key="i">
           <th>{{ r.k }}</th>
           <td>{{ r.v }}</td>
         </tr>

@@ -12,5 +12,8 @@
   },
   "dependencies": {
     "nuxt": "^4.0.0"
+  },
+  "devDependencies": {
+    "vue-tsc": "^3.3.5"
   }
 }

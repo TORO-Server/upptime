@@ -53,7 +53,7 @@ const segments = computed<string[] | null>(() => {
       vector-effect="non-scaling-stroke"
     />
   </svg>
-  <div v-else class="spark-empty">▓▒░ データ収集中 ░▒▓</div>
+  <div v-else class="spark-empty">{{ t.sparkline.collecting }}</div>
 </template>
 
 <style scoped>

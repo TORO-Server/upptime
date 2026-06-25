@@ -32,12 +32,12 @@ const github = computed(
 );
 
 const navItems = computed(() => [
-  { label: "トップ", href: "#top" },
-  { label: "現在の稼働状況", href: "#status" },
-  { label: "このサイトについて", href: "#about" },
-  { label: "サービス一覧", href: "#services" },
-  { label: "関連リンク", href: "#links" },
-  { label: "ソースコード", href: github.value, external: true },
+  { label: t.nav.items.top, href: "#top" },
+  { label: t.nav.items.status, href: "#status" },
+  { label: t.nav.items.about, href: "#about" },
+  { label: t.nav.items.services, href: "#services" },
+  { label: t.nav.items.links, href: "#links" },
+  { label: t.nav.items.source, href: github.value, external: true },
 ]);
 
 const overall = computed<{ key: Status; text: string }>(() => {
@@ -45,13 +45,10 @@ const overall = computed<{ key: Status; text: string }>(() => {
   if (sites.length === 0) return { key: "up", text: "—" };
   const down = sites.filter((s) => s.status === "down").length;
   const degraded = sites.filter((s) => s.status === "degraded").length;
-  if (down === sites.length)
-    return { key: "down", text: "すべてのサービスが停止しています" };
-  if (down > 0)
-    return { key: "down", text: "一部のサービスで障害が発生しています" };
-  if (degraded > 0)
-    return { key: "degraded", text: "一部のサービスで応答が遅延しています" };
-  return { key: "up", text: "すべてのサービスが正常に稼働しています" };
+  if (down === sites.length) return { key: "down", text: t.overall.allDown };
+  if (down > 0) return { key: "down", text: t.overall.someDown };
+  if (degraded > 0) return { key: "degraded", text: t.overall.degraded };
+  return { key: "up", text: t.overall.allUp };
 });
 
 const updatedAt = computed(() =>
@@ -69,8 +66,8 @@ const thisYear = computed(() =>
 useHead({
   title: computed(() =>
     data.value?.name
-      ? `${data.value.name} // 稼働状況モニター`
-      : "TORO STATUS // 稼働状況モニター"
+      ? `${data.value.name} ${t.site.titleSuffix}`
+      : t.site.titleDefault
   ),
 });
 </script>
@@ -81,21 +78,19 @@ useHead({
       <!-- ===== 見出し ===== -->
       <header id="top" class="masthead">
         <h1 class="rainbow glow">{{ data?.name || "TORO Status" }}</h1>
-        <p class="subtitle">{{ data?.intro?.title || "TORO サーバー 稼働状況モニター" }}</p>
+        <p class="subtitle">{{ data?.intro?.title || t.page.defaultSubtitle }}</p>
         <p class="intro">
-          {{ data?.intro?.message || "TORO サーバーで提供する各サービスの稼働状況を、リアルタイムに監視・公開しています。障害や遅延が発生した場合は、本ページに反映されます。" }}
+          {{ data?.intro?.message || t.page.defaultIntro }}
         </p>
-        <p v-if="updatedAt" class="updated">最終更新：{{ updatedAt }}</p>
+        <p v-if="updatedAt" class="updated">{{ t.page.lastUpdated }}{{ updatedAt }}</p>
       </header>
 
-      <Marquee
-        text="TORO サーバー 稼働状況モニター ／ 各サービスの稼働状況を24時間自動で監視しています ／ 障害・メンテナンス情報は本ページにてお知らせいたします"
-      />
+      <Marquee :text="t.marquee" />
 
-      <div v-if="pending" class="state">読み込み中です…</div>
+      <div v-if="pending" class="state">{{ t.page.loading }}</div>
       <div v-else-if="fetchError" class="state error">
-        ステータスデータの読み込みに失敗しました。<br />
-        しばらく経ってから再度お試しください。
+        {{ t.page.fetchErrorLine1 }}<br />
+        {{ t.page.fetchErrorLine2 }}
       </div>
 
       <div v-else class="cols">
@@ -108,7 +103,7 @@ useHead({
         <main class="col-body">
           <!-- 現在の稼働状況 -->
           <section id="status" class="sec">
-            <h2 class="jp-head">■ 現在の稼働状況</h2>
+            <h2 class="jp-head">{{ t.section.status }}</h2>
             <div class="banner" :class="overall.key">
               <span class="banner-dot" />{{ overall.text }}
             </div>
@@ -124,7 +119,7 @@ useHead({
 
           <!-- このサイトについて -->
           <section id="about" class="sec">
-            <h2 class="jp-head">■ このサイトについて</h2>
+            <h2 class="jp-head">{{ t.section.about }}</h2>
             <div class="panel"><AboutBox /></div>
           </section>
 
@@ -132,7 +127,7 @@ useHead({
 
           <!-- サービス一覧 -->
           <section id="services" class="sec">
-            <h2 class="jp-head">■ サービス一覧</h2>
+            <h2 class="jp-head">{{ t.section.services }}</h2>
             <div class="grid">
               <SiteCard v-for="s in data?.sites" :key="s.slug" :site="s" />
             </div>
@@ -141,7 +136,7 @@ useHead({
           <RetroDivider variant="wave" />
           <!-- 関連リンク -->
           <section id="links" class="sec">
-            <h2 class="jp-head">■ 関連リンク</h2>
+            <h2 class="jp-head">{{ t.section.links }}</h2>
             <div class="panel"><LinksSection :github="github" /></div>
           </section>
         </main>
@@ -150,10 +145,10 @@ useHead({
       <!-- ===== フッター ===== -->
       <footer class="foot">
         <div class="foot__rule">──────────────────────────</div>
-        <p>本ページは TORO サーバー運営チームが提供する公式ステータスページです。</p>
+        <p>{{ t.page.footerDesc }}</p>
         <p class="foot__sub">
-          Since 2024<span v-if="updatedAt"> ／ 最終更新 {{ updatedAt }}</span><br />
-          Powered by TypeScript · Nuxt.js · GitHub Actions
+          {{ t.page.since }}<span v-if="updatedAt">{{ t.page.lastUpdatedShort }}{{ updatedAt }}</span><br />
+          {{ t.page.powered }}
         </p>
         <p class="foot__tech">© {{ thisYear }} TORO Server. All rights reserved.</p>
         <div class="foot__rule">──────────────────────────</div>
@@ -163,37 +158,9 @@ useHead({
 </template>
 
 <style scoped>
-.page {
-  max-width: 980px;
-  margin: 0 auto;
-  padding: 16px 10px 44px;
-}
-.frame {
-  background: var(--paper);
-  border: 3px double var(--rule);
-  box-shadow: 0 0 0 1px #fff, 0 6px 30px rgba(0, 0, 0, 0.5);
-  padding: 12px 14px 18px;
-}
-
-/* ---- masthead ---- */
+/* ---- masthead (index 固有) ---- */
 .masthead {
-  text-align: center;
-  padding: 8px 4px 12px;
-  border-bottom: 1px dashed var(--rule-soft);
   scroll-margin-top: 12px;
-}
-.masthead h1 {
-  margin: 0 0 6px;
-  font-size: clamp(2rem, 7vw, 3.2rem);
-  font-weight: 900;
-  letter-spacing: 0.04em;
-}
-.subtitle {
-  margin: 0 0 8px;
-  font-family: var(--mono);
-  color: var(--rule);
-  font-weight: bold;
-  letter-spacing: 0.04em;
 }
 .intro {
   margin: 0 auto 6px;
@@ -307,61 +274,6 @@ useHead({
   }
 }
 
-/* ---- footer ---- */
-.foot {
-  margin-top: 16px;
-  text-align: center;
-  color: var(--ink);
-  font-size: 0.82rem;
-}
-.foot__rule {
-  color: var(--rule-soft);
-  font-family: var(--mono);
-  overflow: hidden;
-  white-space: nowrap;
-  text-align: center;
-}
-.foot p {
-  margin: 8px 0;
-}
-.foot__sub {
-  color: var(--ink-soft);
-  font-size: 0.76rem;
-}
-.foot__tech {
-  font-family: var(--mono);
-  color: var(--ink-soft);
-  font-size: 0.74rem;
-}
-
-/* ---- retro title (design 維持) ---- */
-.rainbow {
-  background: linear-gradient(
-    90deg,
-    #ff0040,
-    #ff8c00,
-    #ffd000,
-    #00b050,
-    #0080ff,
-    #6a3cff,
-    #ff00aa,
-    #ff0040
-  );
-  background-size: 200% auto;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
-  animation: rainbow-shift 6s linear infinite;
-}
-@keyframes rainbow-shift {
-  to {
-    background-position: 200% center;
-  }
-}
-.glow {
-  filter: drop-shadow(1px 1px 0 rgba(0, 0, 0, 0.25));
-}
 .state {
   text-align: center;
   padding: 40px 16px;
@@ -372,18 +284,8 @@ useHead({
   color: var(--down);
 }
 @media (prefers-reduced-motion: reduce) {
-  .rainbow,
   .banner.down {
     animation: none;
-  }
-}
-
-@media (max-width: 480px) {
-  .page {
-    padding: 8px 4px 24px;
-  }
-  .frame {
-    padding: 8px 8px 12px;
   }
 }
 </style>

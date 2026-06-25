@@ -80,3 +80,95 @@ a:hover {
   background: #6a76a8;
   border: 2px outset #aab4e0;
 }
+
+/* ================================================================
+   ページ共通レイアウト（index.vue / error.vue 共通）
+   ================================================================ */
+
+.page {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 16px 10px 44px;
+}
+.frame {
+  background: var(--paper);
+  border: 3px double var(--rule);
+  box-shadow: 0 0 0 1px #fff, 0 6px 30px rgba(0, 0, 0, 0.5);
+  padding: 12px 14px 18px;
+}
+
+/* ---- masthead ---- */
+.masthead {
+  text-align: center;
+  padding: 8px 4px 12px;
+  border-bottom: 1px dashed var(--rule-soft);
+}
+.masthead h1 {
+  margin: 0 0 6px;
+  font-size: clamp(2rem, 7vw, 3.2rem);
+  font-weight: 900;
+  letter-spacing: 0.04em;
+}
+.masthead .subtitle {
+  margin: 0 0 8px;
+  font-family: var(--mono);
+  color: var(--rule);
+  font-weight: bold;
+  letter-spacing: 0.04em;
+}
+
+/* ---- rainbow タイトル ---- */
+.rainbow {
+  background: linear-gradient(
+    90deg,
+    #ff0040, #ff8c00, #ffd000, #00b050, #0080ff, #6a3cff, #ff00aa, #ff0040
+  );
+  background-size: 200% auto;
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+  animation: rainbow-shift 6s linear infinite;
+}
+@keyframes rainbow-shift {
+  to { background-position: 200% center; }
+}
+.glow {
+  filter: drop-shadow(1px 1px 0 rgba(0, 0, 0, 0.25));
+}
+
+/* ---- フッター ---- */
+.foot {
+  margin-top: 16px;
+  text-align: center;
+  color: var(--ink);
+  font-size: 0.82rem;
+}
+.foot__rule {
+  color: var(--rule-soft);
+  font-family: var(--mono);
+  overflow: hidden;
+  white-space: nowrap;
+  text-align: center;
+}
+.foot p {
+  margin: 8px 0;
+}
+.foot__sub {
+  color: var(--ink-soft);
+  font-size: 0.76rem;
+}
+.foot__tech {
+  font-family: var(--mono);
+  color: var(--ink-soft);
+  font-size: 0.74rem;
+}
+
+@media (max-width: 480px) {
+  .page { padding: 8px 4px 24px; }
+  .frame { padding: 8px 8px 12px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .rainbow { animation: none; }
+}

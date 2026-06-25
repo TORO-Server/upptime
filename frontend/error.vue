@@ -3,8 +3,14 @@ const props = defineProps<{ error: { statusCode: number; message: string } }>();
 
 const is404 = computed(() => props.error.statusCode === 404);
 
+const errInfo = computed(() =>
+  is404.value ? t.error.notFound : t.error.server
+);
+
 const title = computed(() =>
-  is404.value ? "404 // ページが見つかりません" : `${props.error.statusCode} // エラーが発生しました`
+  is404.value
+    ? `404 // ${t.error.notFound.title}`
+    : `${props.error.statusCode} // ${t.error.server.title}`
 );
 
 useHead({ title });
@@ -19,51 +25,32 @@ function handleError() {
     <div class="frame">
       <header class="masthead">
         <h1 class="rainbow glow">TORO Status</h1>
-        <p class="subtitle">TORO サーバー 稼働状況モニター</p>
+        <p class="subtitle">{{ t.site.subtitle }}</p>
       </header>
 
       <div class="body">
         <div class="err-box">
           <div class="err-code">{{ error.statusCode }}</div>
           <div class="err-bar" />
-          <p class="err-title">
-            <template v-if="is404">
-              ページが見つかりません
-            </template>
-            <template v-else>
-              エラーが発生しました
-            </template>
-          </p>
+          <p class="err-title">{{ errInfo.title }}</p>
           <p class="err-msg">
-            <template v-if="is404">
-              お探しのページは存在しないか、移動・削除された可能性があります。<br />
-              URL をご確認のうえ、トップページよりアクセスしてください。
-            </template>
-            <template v-else>
-              予期しないエラーが発生しました。<br />
-              しばらく時間をおいてから再度お試しください。
-            </template>
+            {{ errInfo.message1 }}<br />
+            {{ errInfo.message2 }}
           </p>
 
           <div class="err-ascii">
-            <pre>{{ is404 ? `┌─────────────────────────────┐
-│   ERROR 404 — NOT FOUND     │
-│   ページが存在しません       │
-└─────────────────────────────┘` : `┌─────────────────────────────┐
-│   SERVER ERROR              │
-│   エラーが発生しました       │
-└─────────────────────────────┘` }}</pre>
+            <pre>{{ errInfo.ascii }}</pre>
           </div>
 
           <button class="btn-home" @click="handleError">
-            ▶ トップページへ戻る
+            {{ t.error.home }}
           </button>
         </div>
       </div>
 
       <footer class="foot">
         <div class="foot__rule">──────────────────────────</div>
-        <p class="foot__sub">Powered by TypeScript · Nuxt.js · GitHub Actions</p>
+        <p class="foot__sub">{{ t.page.powered }}</p>
         <p class="foot__tech">© {{ new Date().getFullYear() }} TORO Server. All rights reserved.</p>
         <div class="foot__rule">──────────────────────────</div>
       </footer>
@@ -72,37 +59,6 @@ function handleError() {
 </template>
 
 <style scoped>
-.page {
-  max-width: 980px;
-  margin: 0 auto;
-  padding: 16px 10px 44px;
-}
-.frame {
-  background: var(--paper);
-  border: 3px double var(--rule);
-  box-shadow: 0 0 0 1px #fff, 0 6px 30px rgba(0, 0, 0, 0.5);
-  padding: 12px 14px 18px;
-}
-
-/* ---- masthead ---- */
-.masthead {
-  text-align: center;
-  padding: 8px 4px 12px;
-  border-bottom: 1px dashed var(--rule-soft);
-}
-.masthead h1 {
-  margin: 0 0 6px;
-  font-size: clamp(2rem, 7vw, 3.2rem);
-  font-weight: 900;
-  letter-spacing: 0.04em;
-}
-.subtitle {
-  margin: 0;
-  font-family: var(--mono);
-  color: var(--rule);
-  font-weight: bold;
-  letter-spacing: 0.04em;
-}
 
 /* ---- error body ---- */
 .body {
@@ -195,57 +151,11 @@ function handleError() {
   transform: translate(1px, 1px);
 }
 
-/* ---- footer ---- */
-.foot {
-  margin-top: 16px;
-  text-align: center;
-  color: var(--ink);
-  font-size: 0.82rem;
-}
-.foot__rule {
-  color: var(--rule-soft);
-  font-family: var(--mono);
-  overflow: hidden;
-  white-space: nowrap;
-}
-.foot p { margin: 8px 0; }
-.foot__sub {
-  color: var(--ink-soft);
-  font-size: 0.76rem;
-}
-.foot__tech {
-  font-family: var(--mono);
-  color: var(--ink-soft);
-  font-size: 0.74rem;
-}
-
-/* ---- rainbow (index.vue と共通) ---- */
-.rainbow {
-  background: linear-gradient(
-    90deg,
-    #ff0040, #ff8c00, #ffd000, #00b050, #0080ff, #6a3cff, #ff00aa, #ff0040
-  );
-  background-size: 200% auto;
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
-  animation: rainbow-shift 6s linear infinite;
-}
-@keyframes rainbow-shift {
-  to { background-position: 200% center; }
-}
-.glow {
-  filter: drop-shadow(1px 1px 0 rgba(0, 0, 0, 0.25));
-}
-
 @media (max-width: 480px) {
-  .page { padding: 8px 4px 24px; }
-  .frame { padding: 8px 8px 12px; }
   .err-box { padding: 20px 16px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .rainbow, .err-code { animation: none; }
+  .err-code { animation: none; }
 }
 </style>

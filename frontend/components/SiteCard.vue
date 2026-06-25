@@ -3,11 +3,6 @@ import type { SiteSummary } from "~/types";
 
 const props = defineProps<{ site: SiteSummary; flash?: boolean }>();
 
-const STATUS_LABEL: Record<string, string> = {
-  up: "稼働中",
-  degraded: "低下",
-  down: "停止",
-};
 
 // config の icon は 404 し得るのでモノグラムにフォールバック。
 const iconFailed = ref(false);
@@ -65,13 +60,13 @@ function fmtRt(v: number | null | undefined): string {
       </div>
       <span class="pill" :class="site.status">
         <span class="dot" />
-        {{ STATUS_LABEL[site.status] || site.status }}
+        {{ t.status[site.status] || site.status }}
       </span>
     </div>
 
     <div class="meta">
       <span v-if="site.type === 'minecraft' && site.players">
-        プレイヤー {{ site.players.online }}<span class="muted">/{{ site.players.max }}</span> 名
+        {{ t.card.players }} {{ site.players.online }}<span class="muted">/{{ site.players.max }}</span> {{ t.card.playersUnit }}
       </span>
       <span v-if="site.version" class="muted">{{ site.version }}</span>
       <span class="rt">{{ fmtRt(site.responseTime) }}</span>
@@ -82,19 +77,19 @@ function fmtRt(v: number | null | undefined): string {
 
     <div class="stats">
       <div class="stat">
-        <span class="stat-label">24時</span>
+        <span class="stat-label">{{ t.card.stat.h24 }}</span>
         <span class="stat-val">{{ fmtUptime(site.uptime["24h"]) }}</span>
       </div>
       <div class="stat">
-        <span class="stat-label">7日</span>
+        <span class="stat-label">{{ t.card.stat.d7 }}</span>
         <span class="stat-val">{{ fmtUptime(site.uptime["7d"]) }}</span>
       </div>
       <div class="stat">
-        <span class="stat-label">30日</span>
+        <span class="stat-label">{{ t.card.stat.d30 }}</span>
         <span class="stat-val">{{ fmtUptime(site.uptime["30d"]) }}</span>
       </div>
       <div class="stat">
-        <span class="stat-label">応答</span>
+        <span class="stat-label">{{ t.card.stat.rt }}</span>
         <span class="stat-val">{{ fmtRt(site.avgResponseTime["30d"]) }}</span>
       </div>
     </div>

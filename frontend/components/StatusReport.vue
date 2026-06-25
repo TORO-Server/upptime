@@ -21,34 +21,17 @@ const report = computed(() => {
 
   const lines: string[] = [];
   if (down.length) {
-    lines.push(
-      down.map((d) => d.name).join("、") +
-        " で障害が発生しています。復旧に向けて対応を進めています。"
-    );
+    lines.push(t.report.down(down.map((d) => d.name).join("、")));
   } else if (deg.length) {
-    lines.push(
-      deg.map((d) => d.name).join("、") +
-        " で応答の遅延を確認しています。状況を注視しています。"
-    );
+    lines.push(t.report.degraded(deg.map((d) => d.name).join("、")));
   } else {
-    lines.push(
-      "監視対象 " + total + " 件のサービスは、すべて正常に稼働しています。"
-    );
+    lines.push(t.report.allUp(total));
   }
-  if (
-    slowest &&
-    typeof slowest.responseTime === "number" &&
-    slowest.responseTime > 500
-  ) {
-    lines.push(
-      slowest.name +
-        " の応答時間が " +
-        slowest.responseTime +
-        "ms とやや高めの水準です。"
-    );
+  if (slowest && typeof slowest.responseTime === "number" && slowest.responseTime > 500) {
+    lines.push(t.report.slow(slowest.name, slowest.responseTime));
   }
   if (players > 0) {
-    lines.push("現在、Minecraft サーバーには " + players + " 名が接続しています。");
+    lines.push(t.report.players(players));
   }
   return { date: fmtDateJp(baseMs), lines };
 });
@@ -60,9 +43,7 @@ const report = computed(() => {
     <ul class="report__lines">
       <li v-for="(l, i) in report.lines" :key="i">{{ l }}</li>
     </ul>
-    <p class="report__note">
-      稼働状況は10分間隔で自動的に取得・更新されます。
-    </p>
+    <p class="report__note">{{ t.report.note }}</p>
   </div>
 </template>
 

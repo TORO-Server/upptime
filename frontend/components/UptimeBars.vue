@@ -11,12 +11,12 @@ function klass(uptime: number | null): string {
 }
 
 function label(b: DayBar): string {
-  return `${b.date}: ${b.uptime === null ? "データなし" : b.uptime + "%"}`;
+  return `${b.date}: ${b.uptime === null ? t.uptime.noData : b.uptime + "%"}`;
 }
 </script>
 
 <template>
-  <div class="bars" role="img" aria-label="30日間の稼働履歴">
+  <div class="bars" role="img" :aria-label="t.uptime.ariaLabel">
     <span
       v-for="(b, i) in bars"
       :key="i"
