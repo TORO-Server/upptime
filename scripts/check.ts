@@ -9,6 +9,7 @@
 // Usage: npm run check   (or: npx tsx scripts/check.ts)
 
 import net from "node:net";
+import dns from "node:dns/promises";
 import fs from "node:fs/promises";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
@@ -124,18 +125,41 @@ function parseStatusResponse(buf: Buffer): ParsedStatus | null {
   }
 }
 
-function minecraftPing(
+const MINECRAFT_DEFAULT_PORT = 25565;
+
+async function resolveSrv(
+  host: string,
+  port: number
+): Promise<{ host: string; port: number; srvUsed: boolean }> {
+  try {
+    const records = await dns.resolveSrv(`_minecraft._tcp.${host}`);
+    if (records.length > 0) {
+      // Sort by priority (ascending), then weight (descending) per RFC 2782.
+      records.sort((a, b) => a.priority - b.priority || b.weight - a.weight);
+      const srv = records[0]!;
+      return { host: srv.name, port: srv.port, srvUsed: true };
+    }
+  } catch {
+    // No SRV record — fall through to direct connection.
+  }
+  return { host, port, srvUsed: false };
+}
+
+async function minecraftPing(
   host: string,
   port: number,
   timeoutMs: number
-): Promise<CheckResult> {
+): Promise<CheckResult & { srvUsed: boolean }> {
+  // Resolve SRV record first; handshake still uses the original host for virtual hosting.
+  const { host: connectHost, port: connectPort, srvUsed } = await resolveSrv(host, port);
+
   return new Promise((resolve) => {
     const start = performance.now();
     let settled = false;
     let connected = false;
     let chunks = Buffer.alloc(0);
 
-    const socket = net.createConnection({ host, port });
+    const socket = net.createConnection({ host: connectHost, port: connectPort });
     socket.setTimeout(timeoutMs);
 
     const finish = (result: CheckResult): void => {
@@ -191,7 +215,7 @@ function minecraftPing(
         finish({ up: false, responseTime: null, error: "closed" });
       }
     });
-  });
+  }).then((result) => ({ ...result, srvUsed }));
 }
 
 // ---------------------------------------------------------------------------
@@ -322,8 +346,14 @@ async function checkSite(
     "utf8"
   );
 
+  const mcHost = site.host ?? "";
+  const mcPort = site.port ?? MINECRAFT_DEFAULT_PORT;
+  const srvUsed = site.type === "minecraft" && "srvUsed" in check && check.srvUsed;
+  const showPort = !srvUsed && mcPort !== MINECRAFT_DEFAULT_PORT;
   const target =
-    site.type === "minecraft" ? `${site.host}:${site.port}` : site.url ?? "";
+    site.type === "minecraft"
+      ? showPort ? `${mcHost}:${mcPort}` : mcHost
+      : site.url ?? "";
 
   return {
     slug: site.slug,
